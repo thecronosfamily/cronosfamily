@@ -14,7 +14,10 @@
       <img src="assets/crofam-logo.png" alt="CROFAM lion logo">
       <span>The Cronos Family</span>
     </a>
-    <nav aria-label="Main navigation">
+    <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" aria-label="Main navigation">
       <a href="#about">About</a>
       <a href="#token">Token</a>
       <a href="#chart">Chart</a>
@@ -197,6 +200,30 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
+
+    // Mobile navigation: accessible three-line menu, with the requested three destinations.
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const primaryNav = document.getElementById('primary-nav');
+    function closeMobileMenu() {
+      primaryNav.classList.remove('is-open');
+      menuToggle.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open menu');
+    }
+    menuToggle.addEventListener('click', () => {
+      const isOpen = primaryNav.classList.toggle('is-open');
+      menuToggle.classList.toggle('is-open', isOpen);
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    });
+    primaryNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.site-header')) closeMobileMenu();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeMobileMenu();
+    });
+
     // Copy buttons work after the real addresses replace the placeholders.
     const toast = document.getElementById('toast');
     let toastTimer;

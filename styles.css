@@ -651,3 +651,66 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     animation-duration: .01ms !important;
   }
 }
+
+
+/* Mobile refinement: make the CROFAM mark the hero's focal point and keep the full motto visible. */
+@media (max-width: 560px) {
+  .hero-centered {
+    padding-top: 36px;
+    padding-bottom: 48px;
+    gap: 26px;
+  }
+  .hero-centered .brand-lockup {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) clamp(112px, 30vw, 138px) minmax(0, 1fr);
+    gap: clamp(7px, 2vw, 12px);
+    align-items: center;
+  }
+  .hero-centered .brand-lockup img {
+    width: 100%;
+    max-width: 138px;
+  }
+  .hero-centered .lockup-left {
+    font-size: clamp(9px, 2.6vw, 12px);
+    line-height: 1.05;
+    letter-spacing: -.015em;
+    white-space: normal;
+    text-wrap: balance;
+  }
+  .hero-centered .lockup-right {
+    font-size: clamp(23px, 6.2vw, 32px);
+    letter-spacing: -.055em;
+  }
+  .hero-copy-centered .hero-lede {
+    font-size: clamp(18px, 4.8vw, 21px);
+    line-height: 1.25;
+  }
+  .hero-copy-centered .eyebrow {
+    font-size: 9px;
+    letter-spacing: .13em;
+  }
+  .ticker-strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    gap: 8px 10px;
+    padding: 15px 14px;
+    font-size: clamp(8px, 2.4vw, 10px);
+    letter-spacing: .07em;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: center;
+  }
+  .ticker-strip span { display: inline !important; }
+  .ticker-strip .strip-star { padding: 0 1px; }
+}
+@media (max-width: 360px) {
+  .hero-centered .brand-lockup {
+    grid-template-columns: minmax(0, 1fr) 104px minmax(0, 1fr);
+    gap: 6px;
+  }
+  .hero-centered .lockup-left { font-size: 8px; }
+  .hero-centered .lockup-right { font-size: 21px; }
+  .ticker-strip { gap: 7px; padding-left: 10px; padding-right: 10px; }
+}

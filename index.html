@@ -100,10 +100,11 @@
       </div>
       <div class="details-grid">
         <article class="detail-card contract-card">
-          <div class="card-top"><span>CONTRACT ADDRESS</span><span class="status-pill">PENDING</span></div>
-          <div class="address" id="contract-address">PASTE ADRESS HERE</div>
-          <p class="muted">The official token contract will be published here after deployment.</p>
+          <div class="card-top"><span>CONTRACT ADDRESS</span><span class="status-pill">LIVE ON CRONOS</span></div>
+          <div class="address" id="contract-address">0x48bda6f282acdaa8870f762e8797f7b39d036c7d</div>
+          <p class="muted">Official $CROFAM contract on Cronos. Always verify the address before trading.</p>
           <button class="button button-outline" type="button" data-copy="contract-address">Copy address</button>
+          <a class="button button-outline" href="https://dexscreener.com/cronos/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">View DexScreener chart ↗</a>
         </article>
         <article class="detail-card treasury-card">
           <div class="card-top"><span>100% TRANSPARENCY</span><span class="status-pill">PUBLIC WALLET</span></div>
@@ -114,7 +115,7 @@
           <button class="button button-outline" type="button" data-copy="treasury-address">Copy treasury address</button>
         </article>
       </div>
-      <p class="note"><strong>Transparency note:</strong> The contract address will be published here once it is confirmed. Treasury transactions can be checked on-chain using the wallet address above.</p>
+      <p class="note"><strong>Transparency note:</strong> Treasury transactions can be checked on-chain using the wallet address above. Always double-check the token contract before interacting with $CROFAM.</p>
     </section>
 
     <section class="section staking-section" id="staking">
@@ -123,34 +124,28 @@
         <div>
           <p class="eyebrow"><span class="dot"></span> COMMUNITY REWARDS</p>
           <h2>Stake &amp; Earn.</h2>
-          <p class="muted">Staking details and the official staking destination will be announced here. Always verify links through official CROFAM channels.</p>
+          <p class="muted">Stake $CROFAM through the official WolfSwap launcher. Always verify the token and staking details before confirming a transaction.</p>
+          <a class="button button-primary" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake $CROFAM ↗</a>
         </div>
-        <span class="status-pill">COMING SOON</span>
+        <span class="status-pill">AVAILABLE ON WOLFSWAP</span>
       </div>
     </section>
 
     <section class="section chart-section" id="chart">
       <div class="section-label"><span>04</span> / LIVE MARKET DATA</div>
       <div class="chart-heading">
-        <div><h2>The chart.</h2><p class="muted">Live market data will appear here once a supported market pair exists.</p></div>
+        <div><h2>The chart.</h2><p class="muted">Follow $CROFAM market activity on DexScreener.</p></div>
         <span class="chart-tag"><span class="dot"></span> LIVE EMBED</span>
       </div>
       <div class="chart-frame">
-        <!-- Replace CHAIN_ID and PAIR_ADDRESS with the real DexScreener values once the pair exists. -->
         <iframe
-          title="CROFAM live token chart"
-          src="about:blank"
-          data-chart-placeholder="true"
+          title="CROFAM live token chart on DexScreener"
+          src="https://dexscreener.com/cronos/0x48bda6f282acdaa8870f762e8797f7b39d036c7d?embed=1&amp;theme=dark&amp;trades=0&amp;info=0"
           loading="lazy"
           referrerpolicy="no-referrer"
           allow="clipboard-write"
+          style="display:block"
         ></iframe>
-        <div class="chart-placeholder" id="chart-placeholder">
-          <div class="chart-mark">↗</div>
-          <h3>Chart coming soon</h3>
-          <p>Once $CROFAM has a live trading pair, add its DexScreener embed URL in <code>index.html</code>.</p>
-          <p class="code-hint">https://dexscreener.com/cronos/PAIR_ADDRESS?embed=1&amp;theme=light</p>
-        </div>
       </div>
     </section>
 
@@ -162,10 +157,10 @@
       </div>
       <div class="roadmap-list">
         <label class="roadmap-item">
-          <input type="checkbox" class="milestone">
+          <input type="checkbox" class="milestone" checked>
           <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">01</span><span><strong>Launch on Cronos</strong><small>Launch through <a href="https://wolfswap.app/launcher" target="_blank" rel="noopener noreferrer">WolfSwap Launcher ↗</a>.</small></span></span>
-          <span class="milestone-status">IN PROGRESS</span>
+          <span class="milestone-content"><span class="milestone-number">01</span><span><strong>Launch on Cronos</strong><small>Launched on Cronos via <a href="https://wolfswap.app/launcher" target="_blank" rel="noopener noreferrer">WolfSwap Launcher ↗</a>.</small></span></span>
+          <span class="milestone-status">COMPLETED</span>
         </label>
         <label class="roadmap-item">
           <input type="checkbox" class="milestone">
@@ -270,10 +265,10 @@
     const milestones = [...document.querySelectorAll('.milestone')];
     const progressCount = document.getElementById('progress-count');
     const progressBar = document.getElementById('progress-bar');
-    const storageKey = 'crofam-roadmap-v1';
+    const storageKey = 'crofam-roadmap-v2';
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      milestones.forEach((item, i) => item.checked = Boolean(saved[i]));
+      if (Array.isArray(saved) && saved.length === milestones.length) milestones.forEach((item, i) => item.checked = Boolean(saved[i]));
     } catch {}
     function updateProgress() {
       const done = milestones.filter(item => item.checked).length;

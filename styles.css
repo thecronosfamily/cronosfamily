@@ -253,23 +253,17 @@ h2 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; line-height: 1.08; let
 .seg[data-seg="staked"].is-active { transform: scale(1.12); }
 .seg[data-seg="staked"].is-active .glow { opacity: 1; animation: none; }
 .seg:focus-visible .main { stroke: #fff; }
-.donut-value { font-family: var(--font); font-size: 46px; font-weight: 800; fill: #fff; }
+.donut-value { font-family: var(--font); font-size: 38px; font-weight: 800; fill: #fff; }
 .donut-label { font-family: var(--font); font-size: 11px; font-weight: 700; letter-spacing: .14em; fill: #9fb4d6; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes halo { 50% { opacity: .6; transform: scale(1.06); } }
 @keyframes glowPulse { 50% { opacity: .95; } }
 @keyframes segIn { from { opacity: 0; transform: scale(.82) rotate(-12deg); } }
 
-/* Chart */
-.chart-section { background: var(--white); }
-.chart-heading, .roadmap-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 32px; }
-.chart-heading h2, .roadmap-heading h2 { margin-bottom: 8px; }
-.chart-heading p, .roadmap-heading p { margin: 0; font-size: 18px; }
-.chart-tag { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--muted); }
-.chart-link { color: var(--navy-800); text-decoration: none; transition: border-color .2s, box-shadow .2s; }
-.chart-link:hover { border-color: var(--blue); box-shadow: 0 6px 18px rgba(17,153,250,.18); }
-.chart-frame { overflow: hidden; border-radius: 24px; background: var(--navy-950); border: 1px solid var(--line); box-shadow: 0 18px 45px rgba(3,26,61,.12); }
-.chart-frame iframe { display: block; width: 100%; height: clamp(440px, 70vh, 640px); border: 0; }
+/* Roadmap-Überschrift */
+.roadmap-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 32px; }
+.roadmap-heading h2 { margin-bottom: 8px; }
+.roadmap-heading p { margin: 0; font-size: 18px; }
 
 /* Roadmap: Timeline in Gold und Cyan */
 .roadmap-section { background: var(--white); }
@@ -309,16 +303,18 @@ h2 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; line-height: 1.08; let
 
 /* Closing */
 .closing {
-  padding: clamp(72px, 10vw, 120px) var(--gutter); text-align: center; color: #fff;
-  background: radial-gradient(ellipse at 50% 0%, rgba(17,153,250,.35), transparent 55%), linear-gradient(180deg, var(--navy-900), var(--navy-950));
+  padding: clamp(72px, 10vw, 120px) var(--gutter); text-align: center; color: var(--ink);
+  background: radial-gradient(ellipse at 50% 0%, rgba(17,153,250,.16), transparent 58%), var(--white);
 }
-.closing img { width: 96px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 10px 24px rgba(17,153,250,.35)); }
-.closing .eyebrow { display: block; }
+.closing img { width: 96px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 10px 22px rgba(3,26,61,.22)); }
+.closing .eyebrow { display: block; color: var(--navy-800); }
+.closing .button-outline { color: var(--navy-900); border-color: rgba(3,26,61,.28); }
+.closing .button-outline:hover { border-color: var(--navy-900); background: rgba(3,26,61,.05); }
 .closing h2 { margin-bottom: 32px; }
 .closing-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-.closing-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 12px; margin-top: 36px; font-size: 12px; font-weight: 700; letter-spacing: .12em; color: #9fb4d6; }
-.closing-links a { padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0; text-decoration: none; transition: border-color .2s, background .2s; }
-.closing-links a:hover { border-color: var(--blue); background: rgba(17,153,250,.14); }
+.closing-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 12px; margin-top: 36px; font-size: 12px; font-weight: 700; letter-spacing: .12em; color: var(--muted); }
+.closing-links a { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--navy-900); font-size: 14px; font-weight: 600; letter-spacing: 0; text-decoration: none; transition: border-color .2s, background .2s; }
+.closing-links a:hover { border-color: var(--blue); background: #f2f8ff; }
 
 /* Footer */
 .site-footer { padding: 28px var(--gutter) 24px; background: var(--navy-950); color: #9fb4d6; font-size: 14px; border-top: 1px solid rgba(255,255,255,.08); }
@@ -350,24 +346,93 @@ h2 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; line-height: 1.08; let
   }
   #primary-nav.is-open { display: flex; }
   #primary-nav a { padding: 12px 0; font-size: 17px; }
-
-  .value-cards { grid-template-columns: 1fr; gap: 12px; max-width: 520px; }
-  .value-card {
-    display: grid; grid-template-columns: 104px minmax(0, 1fr); grid-template-areas: "media title" "media sub";
-    align-items: center; column-gap: 18px; padding: 20px 20px 20px 18px; border-radius: 20px; text-align: left;
-  }
-  .value-number { top: 12px; left: auto; right: 16px; }
-  .value-media { grid-area: media; height: 76px; margin-bottom: 0; }
-  .value-title { grid-area: title; align-self: end; font-size: 15px; }
-  .value-sub { grid-area: sub; align-self: start; margin-top: 6px; font-size: 12.5px; }
 }
 @media (max-width: 640px) {
-  .roadmap-item { flex-wrap: wrap; margin-left: 46px; padding: 16px; gap: 10px; }
-  .roadmap-item::before { left: -34px; top: calc(50% + 15px); height: calc(100% - 16px); }
-  .milestone-check { left: -46px; width: 26px; height: 26px; margin-top: -13px; }
-  .milestone-content { flex-basis: 100%; }
-  .roadmap-footnote { margin-left: 46px; }
-  .hero-actions .button { width: 100%; }
+  html { scroll-padding-top: 70px; }
+  body { font-size: 15px; }
+  h2 { font-size: 30px; margin-bottom: 12px; }
+  .section { padding-top: 52px; padding-bottom: 52px; }
+  .section-label { margin-bottom: 14px; font-size: 11px; }
+  .button { padding: 12px 22px; font-size: 14px; }
+  .site-header { padding: 10px 20px; gap: 12px; }
+  .brand { font-size: 15px; gap: 10px; }
+  .brand img { width: 32px; height: 32px; }
+  .mobile-menu-toggle { width: 40px; height: 40px; }
+
+  /* Hero: drei kompakte Karten nebeneinander */
+  .hero { padding-top: 36px; padding-bottom: 44px; }
+  .brand-lockup { margin-bottom: 30px; }
+  .value-cards { gap: 8px; margin-bottom: 32px; }
+  .value-card { padding: 28px 8px 14px; border-radius: 16px; }
+  .value-number { top: 9px; left: 11px; font-size: 10px; }
+  .value-media { height: 54px; margin-bottom: 10px; }
+  .value-media img { max-width: 84%; max-height: 100%; }
+  .value-title { font-size: 11.5px; letter-spacing: .1em; }
+  .value-sub { margin-top: 5px; font-size: 10.5px; line-height: 1.4; letter-spacing: 0; }
+  .eyebrow { font-size: 11px; margin-bottom: 14px; }
+  .hero-lede { font-size: 17px; margin-bottom: 22px; }
+  .hero-actions { gap: 10px; }
+  .hero-actions .button { width: 100%; max-width: 320px; }
+
+  /* Staking */
+  .staking-panel { padding: 22px 18px; border-radius: 22px; gap: 22px; }
+  .staking-promise { padding: 16px; margin-bottom: 18px; border-radius: 16px; }
+  .promise-text { font-size: 21px; margin-bottom: 12px; }
+  .promise-badge { font-size: 10.5px; padding: 7px 12px; }
+  .staking-copy > .muted { font-size: 15px; margin-bottom: 18px; }
+  .supply-legend { margin-bottom: 20px; }
+  .supply-legend li { padding: 10px 12px; gap: 10px; }
+  .supply-name { font-size: 14px; }
+  .supply-name small { font-size: 12px; }
+  .supply-value { font-size: 16px; }
+  .supply-note { font-size: 12px; }
+  .supply-chart svg { max-width: 290px; }
+
+  /* Treasury */
+  .treasury-grid { gap: 24px; }
+  .treasury-visual { border-radius: 20px; }
+  .treasury-visual img { aspect-ratio: 4 / 3; }
+  .treasury-copy h2 { margin-bottom: 16px; }
+  .treasury-title { font-size: 22px; }
+  .treasury-copy p { font-size: 15px; line-height: 1.6; }
+  .wallet-label { margin-top: 20px; font-size: 11px; }
+  .address { font-size: 12px; padding: 11px 12px; }
+  .contract-block { margin-top: 24px; padding-top: 22px; }
+  .contract-block .address { font-size: 11.5px; }
+  .contract-block p { font-size: 13px; }
+
+  /* Roadmap: kompakte Liste, Status rechts */
+  .roadmap-heading { gap: 14px; margin-bottom: 22px; }
+  .roadmap-heading p { font-size: 15px; }
+  .progress-box { min-width: 0; width: 100%; }
+  .roadmap-list { gap: 10px; }
+  .roadmap-item { flex-wrap: nowrap; margin-left: 34px; padding: 12px 12px 12px 14px; gap: 10px; border-radius: 14px; }
+  .roadmap-item::before { left: -25px; top: calc(50% + 12px); height: calc(100% - 14px); }
+  .milestone-check { left: -34px; width: 20px; height: 20px; margin-top: -10px; border-width: 2px; }
+  .milestone-check::after { width: 6px; height: 6px; }
+  .is-done .milestone-check { box-shadow: 0 0 0 3px rgba(255,181,46,.18), 0 0 10px rgba(255,181,46,.45); }
+  .is-done .milestone-check::after { width: 4px; height: 8px; margin-top: -1px; border-width: 0 2px 2px 0; }
+  .is-progress .milestone-check { box-shadow: 0 0 0 3px rgba(0,229,255,.16), 0 0 10px rgba(0,229,255,.5); }
+  .is-progress .milestone-check::after { width: 7px; height: 7px; }
+  .milestone-number { display: none; }
+  .milestone-content { flex: 1; flex-basis: auto; min-width: 0; gap: 0; }
+  .milestone-content strong { font-size: 15px; }
+  .milestone-content small { font-size: 12.5px; line-height: 1.45; }
+  .milestone-status { flex: none; align-self: center; margin-left: 0; padding: 5px 8px; font-size: 9.5px; letter-spacing: .06em; }
+  .roadmap-footnote { margin: 18px 0 0 34px; font-size: 12.5px; }
+
+  /* Vision, Abschluss, Footer */
+  .vision-section { padding-bottom: 300px; }
+  .vision-section::before { height: 330px; }
+  .about-text p { font-size: 15.5px; line-height: 1.65; }
+  .closing { padding-top: 56px; padding-bottom: 56px; }
+  .closing img { width: 68px; margin-bottom: 14px; }
+  .closing h2 { font-size: 26px; margin-bottom: 24px; }
+  .closing-links { margin-top: 26px; font-size: 11px; }
+  .closing-links a { padding: 8px 13px; font-size: 13px; }
+  .site-footer { padding: 22px 20px; font-size: 13px; }
+  .footer-links { gap: 6px 18px; }
+  .footer-disclaimer { font-size: 12px; margin-top: 16px; padding-top: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <script>document.documentElement.classList.add('js')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#031a3d">
-  <meta name="description" content="$CROFAM is a community token built around the Cronos ecosystem. One family. One chain.">
+  <meta name="theme-color" content="#030d22">
+  <meta name="description" content="$CROFAM is the community token of The Cronos Family. Stake with no lock-up, follow the public treasury and meet the Lionhearts, our CROFAM OG NFT collection.">
   <title>$CROFAM - The Cronos Family</title>
   <meta property="og:title" content="$CROFAM - The Cronos Family">
-  <meta property="og:description" content="$CROFAM is a community token built around the Cronos ecosystem. One family. One chain.">
+  <meta property="og:description" content="Stake $CROFAM, follow the public treasury and meet the Lionhearts, the CROFAM OG NFT collection on Cronos.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://thecronosfamily.com/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -16,227 +16,505 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="$CROFAM - The Cronos Family">
   <meta name="twitter:image" content="https://thecronosfamily.com/assets/og-image.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/poppins-700.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="CROFAM home">
-      <img src="assets/crofam-logo.png" alt="CROFAM lion logo">
+    <a class="brand" href="#top" aria-label="The Cronos Family, back to top">
+      <img src="assets/crofam-logo-96.png" alt="" width="40" height="40">
       <span>The Cronos Family</span>
     </a>
-    <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
       <span></span><span></span><span></span>
     </button>
     <nav id="primary-nav" aria-label="Main navigation">
+      <a href="#lionhearts">Lionhearts</a>
       <a href="#staking">Staking</a>
-      <a href="#token">Treasury</a>
+      <a href="#treasury">Treasury</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#vision">Vision</a>
+      <a href="#buy">Buy</a>
+      <a class="nav-mobile-only" href="#my-lions">My Lionhearts</a>
     </nav>
+    <button class="header-wallet" type="button" id="wallet-header"><span class="dot" aria-hidden="true"></span><span id="wallet-header-label">Connect wallet</span></button>
     <a class="header-cta" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake $CROFAM <span aria-hidden="true">↗</span></a>
   </header>
 
-  <main id="top">
-    <section class="hero hero-centered">
-      <h1 class="brand-lockup">
-        <span class="lockup-word lockup-left">WE ARE THE</span>
-        <img src="assets/crofam-logo.png" alt="CROFAM Löwenlogo">
-        <span class="lockup-word lockup-right">CROFAM</span>
-      </h1>
-      <div class="value-cards" aria-label="CROFAM values">
-        <a class="value-card" href="#staking">
-          <span class="value-number">01</span>
-          <span class="value-media"><img src="assets/stake-sm.png" alt="" width="375" height="260" loading="eager"></span>
-          <strong class="value-title">STAKING</strong>
-          <span class="value-sub">100% Holder<br>Trading Rewards</span>
-        </a>
-        <a class="value-card" href="#vision">
-          <span class="value-number">02</span>
-          <span class="value-media"><img src="assets/vision-sm.png" alt="" width="420" height="180" loading="eager"></span>
-          <strong class="value-title">VISION</strong>
-          <span class="value-sub">The Road to<br>Crypto.com</span>
-        </a>
-        <a class="value-card" href="#token">
-          <span class="value-number">03</span>
-          <span class="value-media"><img src="assets/growth-sm.png" alt="" width="340" height="260" loading="eager"></span>
-          <strong class="value-title">GROWTH</strong>
-          <span class="value-sub">Treasury Wallet<br>25% of Total Supply</span>
-        </a>
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="lion-wall" aria-hidden="true">
+        <div class="lion-wall-track" id="lion-wall"></div>
       </div>
-      <div class="hero-copy hero-copy-centered">
-        <p class="eyebrow"><span class="dot"></span> CRONOS COMMUNITY TOKEN</p>
-        <p class="hero-lede"><span class="lede-line">A long time ago, a vision was taken from us.</span> <span class="lede-line">A vision of unity and strength.</span></p>
-        <div class="hero-actions">
-          <a class="button button-dark" href="#staking">Stake &amp; Earn <span aria-hidden="true">↓</span></a>
-          <a class="button button-outline" href="https://x.com/TheCronosFamily" target="_blank" rel="noopener noreferrer"><svg class="icon-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Follow on X</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section staking-section" id="staking">
-      <div class="section-label"><span>01</span> / THE STAKING</div>
-      <div class="staking-panel">
-        <div class="staking-copy">
-          <p class="eyebrow"><span class="dot"></span> COMMUNITY REWARDS</p>
-          <h2>The Staking.</h2>
-          <div class="staking-promise">
-            <p class="promise-text">We give <strong>100% of all Trading Rewards</strong> back to Holders / Stakers</p>
-            <span class="promise-badge">WITH NO LOCKING PERIOD AT ALL</span>
+      <div class="hero-inner">
+        <img class="hero-logo" src="assets/crofam-logo.webp" alt="CROFAM lion crest" width="720" height="720">
+        <div class="hero-copy">
+          <h1><span class="h1-small">We are the</span> <span class="h1-big">CROFAM</span></h1>
+          <p class="hero-lead">Builders and dreamers, OGs and newcomers. Different colors, different paths, one chain and one family. $CROFAM is the token that brings us together, and nobody here walks alone.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake $CROFAM <span aria-hidden="true">↗</span></a>
+            <a class="button button-gold" href="#lionhearts">Meet the Lionhearts</a>
+            <a class="button button-vote" href="#vote" id="hero-vote" hidden><span class="live-dot" aria-hidden="true"></span>Vote</a>
           </div>
-          <p class="muted">Stake $CROFAM through the official WolfSwap launcher. Always verify the token and staking details before confirming a transaction.</p>
-          <ul class="supply-legend">
-            <li data-seg="staked" style="--c:#00e5ff"><span class="swatch"></span><span class="supply-name">Staked<small>Locked in the staking wallet</small></span><span class="supply-value">68%</span></li>
-            <li data-seg="burned" style="--c:#ffb52e"><span class="swatch"></span><span class="supply-name">Burned Liquidity<small>Fixed share, permanently removed</small></span><span class="supply-value">18%</span></li>
-            <li data-seg="circulating" style="--c:#7a8cff"><span class="swatch"></span><span class="supply-name">Circulating Supply<small>Everything that remains</small></span><span class="supply-value">14%</span></li>
-          </ul>
-          <div class="staking-actions">
-            <a class="button button-primary" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake $CROFAM ↗</a>
-            <a class="text-link" href="https://explorer.cronos.com/address/0xb92a381AB51DDfD21F81243671F46E67256DDB20#tokens" target="_blank" rel="noopener noreferrer">View staking wallet ↗</a>
-          </div>
-          <p class="supply-note" id="supply-note">The staked share is read from the staking wallet on Cronos. Burned liquidity is fixed at 18%; circulating supply is the remainder.</p>
-        </div>
-        <figure class="supply-chart">
-          <svg viewBox="0 0 300 300" role="group" aria-labelledby="supply-title">
-            <title id="supply-title">$CROFAM supply distribution</title>
-            <defs>
-              <filter id="seg-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
-              <linearGradient id="g-staked" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ff6ff"/><stop offset="1" stop-color="#00c2ff"/></linearGradient>
-              <linearGradient id="g-burned" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffdc82"/><stop offset="1" stop-color="#f29a1f"/></linearGradient>
-              <linearGradient id="g-circulating" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5b1ff"/><stop offset="1" stop-color="#5367ff"/></linearGradient>
-              <radialGradient id="g-core" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#0d3a7a" stop-opacity=".9"/><stop offset="1" stop-color="#031a3d" stop-opacity=".96"/></radialGradient>
-            </defs>
-            <circle class="orbit" cx="150" cy="150" r="144"/>
-            <circle class="orbit-fine" cx="150" cy="150" r="136"/>
-            <g class="seg" data-seg="staked" role="img" tabindex="0" style="--c:#00e5ff"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-staked)"/></g>
-            <g class="seg" data-seg="burned" role="img" tabindex="0" style="--c:#ffb52e"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-burned)"/></g>
-            <g class="seg" data-seg="circulating" role="img" tabindex="0" style="--c:#7a8cff"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-circulating)"/></g>
-            <circle class="core" cx="150" cy="150" r="66"/>
-            <text class="donut-value" id="donut-value" x="150" y="155" text-anchor="middle">68%</text>
-            <text class="donut-label" id="donut-label" x="150" y="178" text-anchor="middle">STAKED</text>
-          </svg>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section token-section section-dark" id="token">
-      <div class="section-label"><span>02</span> / THE TREASURY</div>
-      <div class="treasury-grid">
-        <figure class="treasury-visual">
-          <img src="assets/treasury.jpg" alt="A hoard of $CROFAM lion coins in a cave" width="1100" height="1100" loading="lazy">
-        </figure>
-        <div class="treasury-copy">
-          <h2>The Treasury.</h2>
-          <div class="card-top"><span>100% TRANSPARENCY</span><span class="status-pill">PUBLIC WALLET</span></div>
-          <h3 class="treasury-title">18,500 CRO initial buy-in</h3>
-          <p>Approximately 25% of the total supply. This treasury supports future growth, including listings, liquidity, trading contests, and other community initiatives.</p>
-          <div class="wallet-label">TREASURY WALLET ADDRESS</div>
-          <div class="address-row">
-            <div class="address" id="treasury-address">0xeef6783014abeC80397B67e259Df1DBbE5f94A19</div>
-            <button class="copy-link" type="button" data-copy="treasury-address">Copy address</button>
-          </div>
-          <div class="contract-block">
-            <div class="wallet-label">CONTRACT ADDRESS</div>
-            <div class="address-row">
-              <div class="address" id="contract-address">0x48bda6f282acdaa8870f762e8797f7b39d036c7d</div>
-              <button class="copy-link" type="button" data-copy="contract-address">Copy address</button>
+          <div class="mint-card" id="mint-card">
+            <div class="mint-info">
+              <img src="assets/ebisusbay.png" alt="" width="40" height="40">
+              <div>
+                <p class="mint-title" id="mint-title">Lionhearts mint</p>
+                <p class="mint-sub" id="mint-sub">Nov 21, 8 PM UTC on Ebisus Bay. Whitelist 210 CRO, public 250 CRO.</p>
+              </div>
             </div>
-            <p>Official $CROFAM contract on Cronos. Always verify the address before trading.</p>
+            <div class="countdown" id="mint-countdown" role="timer" aria-label="Time until the Lionhearts mint">
+              <span><b data-u="d">00</b><small>days</small></span>
+              <span><b data-u="h">00</b><small>hours</small></span>
+              <span><b data-u="m">00</b><small>min</small></span>
+              <span><b data-u="s">00</b><small>sec</small></span>
+            </div>
+            <div class="minted" id="minted" hidden>
+              <p><strong id="minted-count">0</strong> / 777 minted</p>
+              <div class="minted-bar"><span id="minted-bar"></span></div>
+            </div>
+            <a class="button button-solid" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" id="mint-cta">Open the drop page <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="live-stats" id="live-stats">
+        <dl>
+          <div><dt>$CROFAM price</dt><dd><span id="ls-price">$0.0000503</span><span class="chg" id="ls-change" hidden></span></dd></div>
+          <div><dt>Market cap</dt><dd id="ls-mcap">$50.3K</dd></div>
+          <div><dt>Liquidity</dt><dd id="ls-liq">–</dd></div>
+          <div><dt>Staked supply</dt><dd id="ls-staked">63.6%</dd></div>
+          <div><dt>Treasury value</dt><dd id="ls-treasury">282K CRO</dd></div>
+        </dl>
+        <p class="ls-src" id="ls-src">Last known values. Updating from Cronos and DexScreener…</p>
+      </div>
+    </section>
+
+    <!-- ============ UMFRAGE (erscheint automatisch, sobald eine Umfrage läuft) ============ -->
+    <section class="poll-strip" id="poll-strip" aria-labelledby="ps-title" hidden>
+      <div class="wrap">
+        <article class="poll-card">
+          <div class="poll-top">
+            <span class="poll-chip" id="ps-chip">Live poll</span>
+            <span class="poll-time" id="ps-time"></span>
+          </div>
+          <div class="poll-head">
+            <div>
+              <h2 id="ps-title"></h2>
+              <p id="ps-desc"></p>
+            </div>
+            <a class="button button-solid" href="#vote" id="ps-cta">Vote now</a>
+          </div>
+          <ol class="poll-results" id="ps-results"></ol>
+          <div class="poll-foot">
+            <p class="poll-meta" id="ps-meta"></p>
+            <details class="poll-record" id="ps-record">
+              <summary>Record details</summary>
+              <div class="record-body" id="ps-record-body"></div>
+            </details>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 01 LIONHEARTS ============ -->
+    <section class="section section-lionhearts" id="lionhearts">
+      <div class="wrap">
+        <p class="section-label"><span>01</span> Lionhearts NFT</p>
+        <div class="lh-head">
+          <div>
+            <h2 class="lh-title">LIONHEARTS</h2>
+            <p class="lh-sub">The CROFAM OG Collection. 777 lions with heart-shaped manes, every one of them unique.</p>
+          </div>
+          <dl class="lh-facts">
+            <div><dt>Lions</dt><dd>777</dd></div>
+            <div><dt>Legendaries</dt><dd>10</dd></div>
+            <div><dt>Rarities</dt><dd>5</dd></div>
+            <div><dt>Traits</dt><dd>150+</dd></div>
+          </dl>
+        </div>
+
+        <h3 class="sub-heading">Collection overview</h3>
+        <ol class="tiers">
+          <li class="tier tier-common">
+            <span class="tier-badge">Tier 1</span>
+            <img src="assets/nft/common.webp" alt="Common Lionheart with a green mane, light brown fur and green sunglasses" width="640" height="640" loading="lazy">
+            <div class="tier-body">
+              <h4>Common</h4>
+              <p>Light brown and dark brown fur</p>
+              <span class="hearts" aria-label="Rarity 1 of 5"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+              <a class="floor" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" data-floor="common"><span>Floor on Ebisus Bay</span><strong>Mint Nov 21 ↗</strong></a>
+            </div>
+          </li>
+          <li class="tier tier-uncommon">
+            <span class="tier-badge">Tier 2</span>
+            <img src="assets/nft/uncommon.webp" alt="Uncommon Lionheart with a blue mane, lavender fur and blue laser eyes" width="640" height="640" loading="lazy">
+            <div class="tier-body">
+              <h4>Uncommon</h4>
+              <p>Coloured fur: blue, green, red and more</p>
+              <span class="hearts" aria-label="Rarity 2 of 5"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>
+              <a class="floor" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" data-floor="uncommon"><span>Floor on Ebisus Bay</span><strong>Mint Nov 21 ↗</strong></a>
+            </div>
+          </li>
+          <li class="tier tier-rare">
+            <span class="tier-badge">Tier 3</span>
+            <img src="assets/nft/rare.webp" alt="Rare Lionheart with gold fur, a gold mane and an emerald heart" width="640" height="640" loading="lazy">
+            <div class="tier-body">
+              <h4>Rare</h4>
+              <p>Gold and silver fur</p>
+              <span class="hearts" aria-label="Rarity 3 of 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+              <a class="floor" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" data-floor="rare"><span>Floor on Ebisus Bay</span><strong>Mint Nov 21 ↗</strong></a>
+            </div>
+          </li>
+          <li class="tier tier-epic">
+            <span class="tier-badge">Tier 4</span>
+            <img src="assets/nft/epic.webp" alt="Epic Lionheart with opal fur, an opal mane and a diamond heart" width="640" height="640" loading="lazy">
+            <div class="tier-body">
+              <h4>Epic</h4>
+              <p>Opal fur and opal mane, only 15 lions</p>
+              <span class="hearts" aria-label="Rarity 4 of 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>
+              <a class="floor" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" data-floor="epic"><span>Floor on Ebisus Bay</span><strong>Mint Nov 21 ↗</strong></a>
+            </div>
+          </li>
+          <li class="tier tier-legendary">
+            <span class="tier-badge">Tier 5</span>
+            <span class="one-of-one">1:1</span>
+            <img src="assets/nft/legendary-300.webp" alt="Legendary Lionheart #300, a ruby crystal lion in a volcanic landscape" width="640" height="640" loading="lazy">
+            <div class="tier-body">
+              <h4>Legendary</h4>
+              <p>Hand-made 1:1, shown here: #300</p>
+              <span class="hearts" aria-label="Rarity 5 of 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+              <a class="floor" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" data-floor="legendary"><span>Floor on Ebisus Bay</span><strong>Mint Nov 21 ↗</strong></a>
+            </div>
+          </li>
+        </ol>
+
+        <div class="mint-box">
+          <div class="mint-when">
+            <img src="assets/ebisusbay.png" alt="" width="56" height="56">
+            <div>
+              <p class="mint-k">Mint on Ebisus Bay</p>
+              <p class="mint-v">November 21, 2026, 8 PM UTC</p>
+            </div>
+          </div>
+          <dl class="mint-prices">
+            <div><dt>Whitelist</dt><dd>210 CRO</dd></div>
+            <div><dt>Public</dt><dd>250 CRO</dd></div>
+          </dl>
+          <a class="button button-gold" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer">Open the drop page <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="lh-utility">
+          <article class="util-card">
+            <div>
+              <h3>Stake NFTs</h3>
+              <p>Stake your Lionhearts on Obsidian and earn $CROFAM. There is no locking period, so you can unstake whenever you want.</p>
+            </div>
+            <a class="button button-solid" href="https://obsidian.finance/crommunities/mze4cgr9rXulJDyJAkos/nfts" target="_blank" rel="noopener noreferrer">Stake NFTs <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="util-card">
+            <div>
+              <h3>Liquid NFTs</h3>
+              <p>The CROFAM Treasury buys and sells Lionhearts NFTs with $CROFAM on Obsidian. Sell a lion to the treasury for $CROFAM, or buy one from it.</p>
+            </div>
+            <a class="button button-gold" id="liquid-link" href="https://obsidian.finance/" target="_blank" rel="noopener noreferrer" data-pending>Liquid NFTs <span class="soon">Link follows</span></a>
+          </article>
+        </div>
+
+        <!-- ============ MY LIONHEARTS (Wallet) ============ -->
+        <div class="vault" id="my-lions">
+          <div class="vault-side">
+            <h3>Your Lionhearts</h3>
+            <p class="vault-intro">Connect your wallet on Cronos to see the lions you hold and your voting power for CROFAM polls.</p>
+            <div class="vault-actions">
+              <button class="button button-solid" type="button" id="wallet-connect">Connect wallet</button>
+              <button class="button button-ghost" type="button" id="wallet-disconnect" hidden>Disconnect</button>
+            </div>
+            <div class="wallet-picker" id="wallet-picker" hidden></div>
+            <p class="vault-addr" id="vault-addr" hidden></p>
+            <form class="vault-lookup" id="vault-lookup" novalidate>
+              <label for="lookup-input">Or check any wallet address</label>
+              <div><input id="lookup-input" type="text" inputmode="text" placeholder="0x…" autocomplete="off" spellcheck="false"><button class="button button-ghost" type="submit">Check</button></div>
+            </form>
+            <p class="vault-status" id="vault-status" role="status"></p>
+            <button class="text-link vault-demo" type="button" id="vault-demo" hidden>Preview with sample lions</button>
+          </div>
+
+          <div class="vault-main">
+            <div class="vault-tabs" role="tablist" aria-label="Your Lionhearts">
+              <button type="button" role="tab" id="tab-lions" aria-selected="true" aria-controls="panel-lions">My lions</button>
+              <button type="button" role="tab" id="tab-vote" aria-selected="false" aria-controls="panel-vote" tabindex="-1">Vote <span class="live-dot" id="tab-vote-dot" aria-hidden="true" hidden></span></button>
+            </div>
+            <div class="vault-panel" id="panel-lions" role="tabpanel" aria-labelledby="tab-lions">
+            <div class="votes">
+              <div class="votes-total">
+                <p class="tr-k">Voting power</p>
+                <p class="votes-big"><span id="votes-total">0</span> <span class="unit">votes</span></p>
+                <p class="votes-calc" id="votes-calc">Connect a wallet to calculate.</p>
+              </div>
+              <ul class="votes-weights" id="votes-weights">
+                <li class="r-common" data-r="common"><span class="w-name">Common</span><span class="w-val">1 vote</span><strong>0</strong></li>
+                <li class="r-uncommon" data-r="uncommon"><span class="w-name">Uncommon</span><span class="w-val">1.5 votes</span><strong>0</strong></li>
+                <li class="r-rare" data-r="rare"><span class="w-name">Rare</span><span class="w-val">2 votes</span><strong>0</strong></li>
+                <li class="r-epic" data-r="epic"><span class="w-name">Epic</span><span class="w-val">3.5 votes</span><strong>0</strong></li>
+                <li class="r-legendary" data-r="legendary"><span class="w-name">Legendary</span><span class="w-val">5 votes</span><strong>0</strong></li>
+              </ul>
+            </div>
+            <div class="tattoo-set" id="tattoo-set">
+              <div class="tattoo-head">
+                <p><strong>Project tattoo set</strong> <span id="tattoo-count"></span></p>
+                <span class="bonus-chip" id="bonus-chip">up to x2</span>
+              </div>
+              <ul class="tattoo-list" id="tattoo-list"></ul>
+              <p class="small-note">Every different project tattoo across your lions adds 0.05x to your votes. Collect all of them and your votes count double.</p>
+            </div>
+            <ul class="vault-grid" id="vault-grid" aria-label="Lionhearts in this wallet"></ul>
+            </div>
+            <div class="vault-panel" id="panel-vote" role="tabpanel" aria-labelledby="tab-vote" hidden>
+              <span class="anchor" id="vote"></span>
+              <div class="vote-body" id="vote-body"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section roadmap-section" id="roadmap">
-      <div class="section-label"><span>03</span> / THE ROADMAP</div>
-      <div class="roadmap-heading">
-        <div><h2>The Roadmap.</h2><p class="muted">Stronger together. Further together.</p></div>
-        <div class="progress-box"><span id="progress-count">4 / 8 COMPLETE</span><div class="progress-track" id="progress-track" role="progressbar" aria-label="Roadmap progress" aria-valuemin="0" aria-valuemax="8" aria-valuenow="4"><span id="progress-bar" style="width:50%"></span></div></div>
-      </div>
-      <ol class="roadmap-list">
-        <li class="roadmap-item is-done">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">01</span><span><strong>Launch on Cronos</strong><small>Launched on Cronos via <a href="https://wolfswap.app/launcher" target="_blank" rel="noopener noreferrer">WolfSwap Launcher ↗</a>.</small></span></span>
-          <span class="milestone-status">COMPLETED</span>
-        </li>
-        <li class="roadmap-item is-progress">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">02</span><span><strong>Build a Community</strong><small>Bring people together, grow participation, and build a strong CROFAM community.</small></span></span>
-          <span class="milestone-status">IN PROGRESS</span>
-        </li>
-        <li class="roadmap-item is-done">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">03</span><span><strong>Listing on CoinGecko</strong><small>Expand visibility and make CROFAM easier to discover. <a href="https://www.coingecko.com/en/coins/the-cronos-family" target="_blank" rel="noopener noreferrer">View listing ↗</a></small></span></span>
-          <span class="milestone-status">COMPLETED</span>
-        </li>
-        <li class="roadmap-item is-done">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">04</span><span><strong>Listing on VVS</strong><small>Make $CROFAM easier to trade on Cronos.</small></span></span>
-          <span class="milestone-status">COMPLETED</span>
-        </li>
-        <li class="roadmap-item is-done">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">05</span><span><strong>CoinStats Listing</strong><small>Improve visibility and make tracking easier. <a href="https://coinstats.app/coins/the-cronos-family/" target="_blank" rel="noopener noreferrer">View listing ↗</a></small></span></span>
-          <span class="milestone-status">COMPLETED</span>
-        </li>
-        <li class="roadmap-item">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">06</span><span><strong>Listing on UltApp</strong><small>Make $CROFAM available to more users.</small></span></span>
-          <span class="milestone-status">OPEN</span>
-        </li>
-        <li class="roadmap-item">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">07</span><span><strong>CoinMarketCap Listing</strong><small>Application sent.</small></span></span>
-          <span class="milestone-status">OPEN</span>
-        </li>
-        <li class="roadmap-item roadmap-final">
-          <span class="milestone-check" aria-hidden="true"></span>
-          <span class="milestone-content"><span class="milestone-number">08</span><span><strong>Listing on Crypto.com App</strong><small>Application sent. Long-term goal: bring $CROFAM to the Crypto.com App.</small></span></span>
-          <span class="milestone-status">OPEN</span>
-        </li>
-      </ol>
-      <p class="roadmap-footnote">Milestones are goals, not guarantees. Listings are decided by third-party platforms.</p>
-    </section>
+    <!-- ============ 02 STAKING ============ -->
+    <section class="section section-alt" id="staking">
+      <div class="wrap">
+        <p class="section-label"><span>02</span> The Staking</p>
+        <div class="stake-head">
+          <h2>The Staking.</h2>
+          <p class="muted">Two ways to stake with the family: your $CROFAM tokens and your Lionhearts.</p>
+        </div>
+        <div class="stake-split">
+          <article class="stake-card stake-token">
+            <h3>Stake $CROFAM token</h3>
+            <div class="staking-promise">
+              <p class="promise-text"><strong>100%</strong> Staked Holders Trading Rewards</p>
+              <span class="promise-badge">No locking period at all</span>
+            </div>
+            <div class="stake-token-body">
+              <figure class="supply-chart">
+                <svg viewBox="0 0 300 300" role="group" aria-labelledby="supply-title">
+                  <title id="supply-title">$CROFAM supply distribution</title>
+                  <defs>
+                    <filter id="seg-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+                    <linearGradient id="g-staked" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b8"/><stop offset=".55" stop-color="#ffc247"/><stop offset="1" stop-color="#e0961a"/></linearGradient>
+                    <linearGradient id="g-burned" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5cc0ff"/><stop offset="1" stop-color="#1177d6"/></linearGradient>
+                    <linearGradient id="g-circulating" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a6f96"/><stop offset="1" stop-color="#34466b"/></linearGradient>
+                  </defs>
+                  <circle class="orbit" cx="150" cy="150" r="144"/>
+                  <circle class="orbit-fine" cx="150" cy="150" r="136"/>
+                  <g class="seg" data-seg="staked" role="img" tabindex="0" style="--c:#ffc247"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-staked)"/></g>
+                  <g class="seg" data-seg="burned" role="img" tabindex="0" style="--c:#2b9cff"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-burned)"/></g>
+                  <g class="seg" data-seg="circulating" role="img" tabindex="0" style="--c:#6b80a8"><path class="glow" filter="url(#seg-blur)"/><path class="main" fill="url(#g-circulating)"/></g>
+                  <circle class="core" cx="150" cy="150" r="66"/>
+                  <text class="donut-value" id="donut-value" x="150" y="155" text-anchor="middle">64%</text>
+                  <text class="donut-label" id="donut-label" x="150" y="178" text-anchor="middle">STAKED</text>
+                </svg>
+              </figure>
+              <ul class="supply-legend">
+                <li data-seg="staked" style="--c:#ffc247"><span class="swatch"></span><span class="supply-name">Staked<small>In the staking contract</small></span><span class="supply-value">64%</span></li>
+                <li data-seg="burned" style="--c:#2b9cff"><span class="swatch"></span><span class="supply-name">Burned liquidity<small>Permanently removed</small></span><span class="supply-value">18%</span></li>
+                <li data-seg="circulating" style="--c:#6b80a8"><span class="swatch"></span><span class="supply-name">Circulating<small>Everything else</small></span><span class="supply-value">18%</span></li>
+              </ul>
+            </div>
+            <ul class="stake-steps">
+              <li><span>Get $CROFAM, for example in the <a href="#buy">Buy section</a></span></li>
+              <li>Open the $CROFAM staking pool on WolfSwap</li>
+              <li>Connect your wallet and stake. Unstake whenever you want</li>
+            </ul>
+            <div class="row-actions">
+              <a class="button button-solid" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake on WolfSwap <span aria-hidden="true">↗</span></a>
+              <a class="text-link" href="https://explorer.cronos.com/address/0xb92a381AB51DDfD21F81243671F46E67256DDB20#tokens" target="_blank" rel="noopener noreferrer">View staking contract ↗</a>
+            </div>
+            <p class="small-note" id="supply-note">The staked share is read live from the staking contract on Cronos.</p>
+          </article>
 
-    <section class="section vision-section section-dark" id="vision">
-      <div class="section-label"><span>04</span> / THE VISION</div>
-      <div class="about-grid">
-        <h2>The Vision.</h2>
-        <div class="about-text">
-          <p>$CROFAM is a community token with roots in the Cronos ecosystem and a name we share. We don't make big promises. We have one goal, we grow as a community, and we know the direction we're heading.</p>
-          <p class="vision-return">That direction is the Crypto.com App. Getting $CROFAM listed there is what we're working toward, and it's the vision that was taken from us once. Now we're taking it back, one step at a time on Cronos.</p>
+          <article class="stake-card stake-nft">
+            <h3>Stake LIONHEARTS NFTs</h3>
+            <img class="stake-nft-art" src="assets/nft/stake-lions.webp" alt="Three Lionhearts NFTs: an epic opal lion, a rare gold lion and legendary #300" width="900" height="620" loading="lazy">
+            <div class="staking-promise">
+              <p class="promise-text">Earn <strong>$CROFAM</strong></p>
+              <span class="promise-badge">No locking period</span>
+            </div>
+            <p>Your lion doesn't have to sit idle in your wallet. Stake your Lionhearts in the CROFAM crommunity on Obsidian and they earn $CROFAM for you. Unstake whenever you want.</p>
+            <ul class="stake-steps">
+              <li>Open the CROFAM crommunity on Obsidian</li>
+              <li>Connect the wallet that holds your Lionhearts</li>
+              <li>Pick your lions and confirm the stake</li>
+            </ul>
+            <div class="row-actions">
+              <a class="button button-solid" href="https://obsidian.finance/crommunities/mze4cgr9rXulJDyJAkos/nfts" target="_blank" rel="noopener noreferrer">Stake on Obsidian <span aria-hidden="true">↗</span></a>
+            </div>
+            <p class="small-note">Always check the collection and the contract on Obsidian before you confirm a transaction.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="closing">
-      <img src="assets/crofam-logo.png" alt="" aria-hidden="true">
-      <p class="eyebrow">THE CROFAM SPIRIT</p>
-      <h2>Built by the community.<br>Moving forward together.</h2>
-      <div class="closing-actions">
-        <a class="button button-primary" href="https://x.com/TheCronosFamily" target="_blank" rel="noopener noreferrer"><svg class="icon-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Follow on X</a>
-        <a class="button button-outline" href="https://wolfswap.app/launcher/v3/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Stake $CROFAM <span aria-hidden="true">↗</span></a>
+    <!-- ============ 03 TREASURY ============ -->
+    <section class="section" id="treasury">
+      <div class="wrap">
+        <p class="section-label"><span>03</span> The Treasury</p>
+        <div class="tr-head">
+          <div>
+            <h2>The Treasury.</h2>
+            <p class="muted">A public wallet anyone can check. Every holding is valued in CRO at the current market price.</p>
+          </div>
+          <a class="text-link" href="https://explorer.cronos.com/address/0xeef6783014abeC80397B67e259Df1DBbE5f94A19#tokens" target="_blank" rel="noopener noreferrer">View wallet on Cronos Explorer ↗</a>
+        </div>
+
+        <div class="tr-overview">
+          <div class="tr-total">
+            <p class="tr-k">Total treasury value</p>
+            <p class="tr-big"><span id="tr-total-cro">282,113</span> <span class="unit">CRO</span></p>
+            <p class="tr-usd" id="tr-total-usd">$11,959 USD</p>
+            <div class="tr-road">
+              <div class="tr-road-top"><span>Road to <strong id="tr-goal-label">1,000,000 CRO</strong></span><span id="tr-goal-pct">28.2%</span></div>
+              <div class="tr-road-track" role="progressbar" aria-label="Progress to the next treasury goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="28" id="tr-road-track"><span id="tr-road-bar" style="width:14.1%"></span></div>
+              <ol class="tr-road-marks" id="tr-road-marks"><li style="left:0%">0</li><li style="left:25%">500K</li><li style="left:50%">1M</li><li style="left:75%">2.5M</li><li style="left:100%">5M</li></ol>
+            </div>
+          </div>
+          <div class="tr-side">
+            <img src="assets/treasury.webp" alt="" width="1100" height="1100" loading="lazy">
+            <dl class="tr-kpis">
+              <div><dt>Staked $CROFAM</dt><dd id="tr-kpi-staked">237.59M</dd></div>
+              <div><dt>Share of total supply</dt><dd id="tr-kpi-share">23.8%</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="tr-holdings">
+          <div class="tr-holdings-head">
+            <h3>Treasury holdings</h3>
+            <p class="tr-status" id="tr-status" role="status">Showing the last known values.</p>
+            <button class="button button-ghost" type="button" id="tr-refresh">Refresh</button>
+          </div>
+          <div class="tr-mix" id="tr-mix" aria-hidden="true"></div>
+          <table class="tr-table">
+            <thead><tr><th scope="col">Asset</th><th scope="col">Amount</th><th scope="col">Value in CRO</th><th scope="col">Value in USD</th><th scope="col">Share</th></tr></thead>
+            <tbody id="tr-rows"></tbody>
+          </table>
+          <p class="small-note">Values use the current $CROFAM price on VVS and the current CRO price, so they move with the market and update every 60 seconds while this section is open. A large holding could not be sold at exactly this price.</p>
+        </div>
+
+        <div class="tr-addresses">
+          <div class="addr">
+            <p class="tr-k">Treasury wallet</p>
+            <div class="addr-row"><code id="treasury-address">0xeef6783014abeC80397B67e259Df1DBbE5f94A19</code><button class="copy" type="button" data-copy="treasury-address">Copy address</button></div>
+          </div>
+          <div class="addr">
+            <p class="tr-k">$CROFAM contract</p>
+            <div class="addr-row"><code id="contract-address">0x48bda6f282acdaa8870f762e8797f7b39d036c7d</code><button class="copy" type="button" data-copy="contract-address">Copy address</button></div>
+          </div>
+        </div>
       </div>
-      <div class="closing-links">
-        <span>TRACK $CROFAM ON</span>
+    </section>
+
+    <!-- ============ 04 ROADMAP ============ -->
+    <section class="section section-alt" id="roadmap">
+      <div class="wrap">
+        <p class="section-label"><span>04</span> The Roadmap</p>
+        <div class="roadmap-heading">
+          <div><h2>The Roadmap.</h2><p class="muted">Stronger together. Further together.</p></div>
+          <div class="progress-box"><span id="progress-count">5 / 8 complete</span><div class="progress-track" id="progress-track" role="progressbar" aria-label="Roadmap progress" aria-valuemin="0" aria-valuemax="8" aria-valuenow="5"><span id="progress-bar" style="width:62.5%"></span></div></div>
+        </div>
+        <ol class="roadmap-list">
+          <li class="roadmap-item is-done"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">01</span><span><strong>Launch on Cronos</strong><small>Launched on Cronos via <a href="https://wolfswap.app/launcher" target="_blank" rel="noopener noreferrer">WolfSwap Launcher ↗</a></small></span></span><span class="milestone-status">Completed</span></li>
+          <li class="roadmap-item is-progress"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">02</span><span><strong>Build a community</strong><small>Bring people together, grow participation and build a strong CROFAM community.</small></span></span><span class="milestone-status">In progress</span></li>
+          <li class="roadmap-item is-done"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">03</span><span><strong>Listing on CoinGecko</strong><small>Expand visibility and make CROFAM easier to discover. <a href="https://www.coingecko.com/en/coins/the-cronos-family" target="_blank" rel="noopener noreferrer">View listing ↗</a></small></span></span><span class="milestone-status">Completed</span></li>
+          <li class="roadmap-item is-done"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">04</span><span><strong>Listing on VVS</strong><small>Make $CROFAM easier to trade on Cronos.</small></span></span><span class="milestone-status">Completed</span></li>
+          <li class="roadmap-item is-done"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">05</span><span><strong>CoinStats listing</strong><small>Improve visibility and make tracking easier. <a href="https://coinstats.app/coins/the-cronos-family/" target="_blank" rel="noopener noreferrer">View listing ↗</a></small></span></span><span class="milestone-status">Completed</span></li>
+          <li class="roadmap-item is-done"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">06</span><span><strong>Listing on UltApp</strong><small>$CROFAM is now available to more users through UltApp.</small></span></span><span class="milestone-status">Completed</span></li>
+          <li class="roadmap-item"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">07</span><span><strong>CoinMarketCap listing</strong><small>Application sent.</small></span></span><span class="milestone-status">Open</span></li>
+          <li class="roadmap-item roadmap-final"><span class="milestone-check" aria-hidden="true"></span><span class="milestone-content"><span class="milestone-number">08</span><span><strong>Listing on the Crypto.com App</strong><small>Application sent. Long-term goal: bring $CROFAM to the Crypto.com App.</small></span></span><span class="milestone-status">Open</span></li>
+        </ol>
+        <p class="small-note">Milestones are goals, not guarantees. Listings are decided by third-party platforms.</p>
+      </div>
+    </section>
+
+    <!-- ============ 05 VISION ============ -->
+    <section class="section section-vision" id="vision">
+      <div class="wrap vision-wrap">
+        <div class="vision-top">
+          <div>
+            <p class="section-label"><span>05</span> The Vision</p>
+            <h2>The Vision.</h2>
+            <p class="vision-lead">$CROFAM started as a name we share and grew into a family that keeps building on Cronos.</p>
+          </div>
+          <img class="vision-art" src="assets/vision-family.webp" alt="Seven Lionhearts in gold-rimmed honeycomb tiles, each in a different color" width="1122" height="1120" loading="lazy">
+        </div>
+        <div class="vision-cols">
+          <p>We don't promise the moon. We promise to keep showing up. Every listing, every staker and every new Lionheart makes the family a little stronger, and that is how we measure progress.</p>
+          <p>Our big goal has not changed: we want $CROFAM in the Crypto.com App. We are not there yet and we won't put a date on it. We will get there the way we got everywhere else, step by step and together.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 BUY ============ -->
+    <section class="section section-alt section-buy" id="buy">
+      <div class="wrap">
+        <p class="section-label"><span>06</span> Buy $CROFAM</p>
+        <div class="buy-head">
+          <h2>Buy $CROFAM.</h2>
+          <p class="muted">Swap CRO for $CROFAM on Cronos. Pick the DEX you like, enter the amount and confirm in your wallet.</p>
+        </div>
+        <ul class="buy-list">
+          <li class="buy-card">
+            <h3>WolfSwap</h3>
+            <p>Where $CROFAM launched. Buy here and stake right after, all in one place.</p>
+            <a class="button button-solid" data-buy="wolfswap" href="https://wolfswap.app/swap?inputCurrency=CRO&amp;outputCurrency=0x48bda6f282acdaa8870f762e8797f7b39d036c7d&amp;chain=cronos" target="_blank" rel="noopener noreferrer">Buy via WolfSwap <span aria-hidden="true">↗</span></a>
+          </li>
+          <li class="buy-card">
+            <h3>Obsidian</h3>
+            <p>A DEX aggregator that routes your swap across Cronos DEXs for the best price.</p>
+            <a class="button button-solid" data-buy="obsidian" href="https://obsidian.finance/?inputCurrency=CRO&amp;outputCurrency=0x48bda6f282acdaa8870f762e8797f7b39d036c7d&amp;chain=cronos" target="_blank" rel="noopener noreferrer">Buy via Obsidian <span aria-hidden="true">↗</span></a>
+          </li>
+          <li class="buy-card">
+            <h3>Cro.trade</h3>
+            <p>Opens the $CROFAM trading page directly, with the chart next to the swap.</p>
+            <a class="button button-solid" data-buy="crotrade" href="https://cro.trade/0x48bda6f282acdaa8870f762e8797f7b39d036c7d" target="_blank" rel="noopener noreferrer">Buy via Cro.trade <span aria-hidden="true">↗</span></a>
+          </li>
+        </ul>
+        <div class="addr buy-addr">
+          <p class="tr-k">Check the contract before you swap</p>
+          <div class="addr-row"><code id="buy-contract">0x48bda6f282acdaa8870f762e8797f7b39d036c7d</code><button class="copy" type="button" data-copy="buy-contract">Copy address</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLOSING ============ -->
+    <section class="closing">
+      <img src="assets/crofam-logo.webp" alt="" width="120" height="120" loading="lazy">
+      <h2>Built by the community.<br>Moving forward together.</h2>
+      <div class="row-actions center">
+        <a class="button button-primary" href="https://x.com/TheCronosFamily" target="_blank" rel="noopener noreferrer"><svg class="icon-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Follow on X</a>
+        <a class="button button-gold" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer">Lionhearts on Ebisus Bay <span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="closing-links">Track $CROFAM on
         <a href="https://dexscreener.com/cronos/0x2b70cbe881dccfa26b58fc2d0215e30b2520b677" target="_blank" rel="noopener noreferrer">DexScreener ↗</a>
         <a href="https://www.coingecko.com/en/coins/the-cronos-family" target="_blank" rel="noopener noreferrer">CoinGecko ↗</a>
         <a href="https://coinstats.app/coins/the-cronos-family/" target="_blank" rel="noopener noreferrer">CoinStats ↗</a>
-      </div>
+      </p>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-main">
-      <a class="footer-brand" href="#top">$CROFAM</a>
+      <a class="footer-brand" href="#top"><img src="assets/crofam-logo-96.png" alt="" width="28" height="28"> $CROFAM</a>
       <nav class="footer-links" aria-label="Community and market links">
         <a href="https://x.com/TheCronosFamily" target="_blank" rel="noopener noreferrer">X</a>
         <a href="https://dexscreener.com/cronos/0x2b70cbe881dccfa26b58fc2d0215e30b2520b677" target="_blank" rel="noopener noreferrer">DexScreener</a>
         <a href="https://www.coingecko.com/en/coins/the-cronos-family" target="_blank" rel="noopener noreferrer">CoinGecko</a>
         <a href="https://coinstats.app/coins/the-cronos-family/" target="_blank" rel="noopener noreferrer">CoinStats</a>
+        <a href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer">Ebisus Bay</a>
       </nav>
       <span><span id="year">2026</span> The Cronos Family</span>
     </div>
@@ -244,182 +522,6 @@
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script>
-
-    // Mobile navigation: accessible three-line menu, with the requested three destinations.
-    const menuToggle = document.querySelector('.mobile-menu-toggle');
-    const primaryNav = document.getElementById('primary-nav');
-    function closeMobileMenu() {
-      primaryNav.classList.remove('is-open');
-      menuToggle.classList.remove('is-open');
-      menuToggle.setAttribute('aria-expanded', 'false');
-      menuToggle.setAttribute('aria-label', 'Open menu');
-    }
-    menuToggle.addEventListener('click', () => {
-      const isOpen = primaryNav.classList.toggle('is-open');
-      menuToggle.classList.toggle('is-open', isOpen);
-      menuToggle.setAttribute('aria-expanded', String(isOpen));
-      menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-    });
-    primaryNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
-    document.addEventListener('click', event => {
-      if (!event.target.closest('.site-header')) closeMobileMenu();
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeMobileMenu();
-    });
-
-    // Copy buttons work after the real addresses replace the placeholders.
-    const toast = document.getElementById('toast');
-    let toastTimer;
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('visible');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('visible'), 2400);
-    }
-    document.querySelectorAll('[data-copy]').forEach(button => {
-      button.addEventListener('click', async () => {
-        const text = document.getElementById(button.dataset.copy).textContent.trim();
-        if (text.includes('PASTE ')) {
-          showToast('Add the official address first.');
-          return;
-        }
-        try {
-          await navigator.clipboard.writeText(text);
-          showToast('Address copied.');
-        } catch {
-          showToast('Copy unavailable. Please select the address manually.');
-        }
-      });
-    });
-
-    // Roadmap progress: counts the items marked with class "is-done".
-    const roadmapItems = [...document.querySelectorAll('.roadmap-item')];
-    const doneCount = roadmapItems.filter(item => item.classList.contains('is-done')).length;
-    document.getElementById('progress-count').textContent = `${doneCount} / ${roadmapItems.length} COMPLETE`;
-    document.getElementById('progress-bar').style.width = `${(doneCount / roadmapItems.length) * 100}%`;
-    document.getElementById('progress-track').setAttribute('aria-valuenow', doneCount);
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Supply chart: staked share is read live from the Cronos RPC, with 68% as fallback.
-    (function () {
-      const TOKEN = '0x48bda6f282acdaa8870f762e8797f7b39d036c7d';
-      const STAKING_WALLET = '0xb92a381AB51DDfD21F81243671F46E67256DDB20';
-      const RPCS = ['https://evm.cronos.org', 'https://cronos-evm-rpc.publicnode.com'];
-      const BURNED = 18;
-      const root = document.getElementById('staking');
-      const names = { staked: 'STAKED', burned: 'BURNED', circulating: 'CIRCULATING' };
-      const labels = { staked: 'Staked', burned: 'Burned liquidity', circulating: 'Circulating supply' };
-      const C = 150, RO = 112, RI = 72;
-      let shares = {};
-      const fmt = n => (Math.round(n * 10) / 10) + '%';
-      const pt = (r, a) => [C + r * Math.cos(a), C + r * Math.sin(a)];
-      function sector(a0, a1) {
-        const large = a1 - a0 > Math.PI ? 1 : 0;
-        const [x0, y0] = pt(RO, a0), [x1, y1] = pt(RO, a1), [x2, y2] = pt(RI, a1), [x3, y3] = pt(RI, a0);
-        return `M${x0} ${y0}A${RO} ${RO} 0 ${large} 1 ${x1} ${y1}L${x2} ${y2}A${RI} ${RI} 0 ${large} 0 ${x3} ${y3}Z`;
-      }
-      function setShares(staked) {
-        staked = Math.min(Math.max(staked, 0), 100 - BURNED);
-        shares = { staked, burned: BURNED, circulating: 100 - BURNED - staked };
-        let a = -Math.PI / 2;
-        Object.keys(shares).forEach(k => {
-          const span = Math.min(shares[k] / 100 * 2 * Math.PI, 2 * Math.PI - 0.01);
-          const pad = span > 0.05 ? 0.012 : 0;
-          const d = span > 0.001 ? sector(a + pad, a + span - pad) : '';
-          root.querySelectorAll(`.seg[data-seg="${k}"] path`).forEach(p => p.setAttribute('d', d));
-          root.querySelector(`.seg[data-seg="${k}"]`).setAttribute('aria-label', `${labels[k]}: ${fmt(shares[k])}`);
-          root.querySelector(`li[data-seg="${k}"] .supply-value`).textContent = fmt(shares[k]);
-          a += span;
-        });
-        showCenter(current);
-      }
-      let current = 'staked';
-      function showCenter(k) {
-        current = k;
-        document.getElementById('donut-value').textContent = fmt(shares[k]);
-        document.getElementById('donut-label').textContent = names[k];
-      }
-      const items = [...root.querySelectorAll('[data-seg]')];
-      function hover(k) {
-        items.forEach(el => el.classList.toggle('is-active', Boolean(k) && el.dataset.seg === k));
-        showCenter(k || 'staked');
-      }
-      items.forEach(el => {
-        el.addEventListener('mouseenter', () => hover(el.dataset.seg));
-        el.addEventListener('mouseleave', () => hover(null));
-        el.addEventListener('focus', () => hover(el.dataset.seg));
-        el.addEventListener('blur', () => hover(null));
-      });
-      async function call(url, data) {
-        const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ to: TOKEN, data }, 'latest'] }) });
-        const json = await res.json();
-        if (!json.result || json.result === '0x') throw new Error('empty');
-        return BigInt(json.result);
-      }
-      async function loadStaked() {
-        const balanceOf = '0x70a08231' + STAKING_WALLET.slice(2).toLowerCase().padStart(64, '0');
-        for (const url of RPCS) {
-          try {
-            const [bal, total] = await Promise.all([call(url, balanceOf), call(url, '0x18160ddd')]);
-            if (total > 0n) return Number(bal * 10000n / total) / 100;
-          } catch {}
-        }
-        return null;
-      }
-      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let counted = false;
-      function countUp() {
-        if (counted || reduceMotion) return;
-        counted = true;
-        const t0 = performance.now(), dur = 1300, val = document.getElementById('donut-value');
-        (function step(now) {
-          if (current !== 'staked') return;
-          const k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3);
-          val.textContent = k < 1 ? Math.round(shares.staked * e) + '%' : fmt(shares.staked);
-          if (k < 1) requestAnimationFrame(step);
-        })(t0);
-      }
-      if ('IntersectionObserver' in window) {
-        const countIo = new IntersectionObserver(es => { if (es[0].isIntersecting) { countUp(); countIo.disconnect(); } }, { threshold: .4 });
-        countIo.observe(root.querySelector('.supply-chart'));
-      }
-      setShares(68);
-      loadStaked().then(value => {
-        const note = document.getElementById('supply-note');
-        if (value === null) { note.textContent = 'Live data is unavailable right now. Showing the last known staked share of 68%.'; return; }
-        setShares(value);
-        note.textContent = 'The staked share is read live from the staking wallet on Cronos. Burned liquidity is fixed at 18%; circulating supply is the remainder.';
-      });
-    })();
-  
-    // Sanftes Einblenden beim Scrollen (ohne JS oder mit reduzierter Bewegung bleibt alles sichtbar)
-    (function () {
-      if (!('IntersectionObserver' in window)) return;
-      const els = [...document.querySelectorAll('.staking-panel, .treasury-grid, .vision-section .about-grid, .roadmap-heading, .roadmap-item, .closing > *')];
-      els.forEach(el => el.classList.add('reveal'));
-      document.querySelectorAll('.roadmap-item').forEach((el, i) => el.style.setProperty('--d', (i % 4) * 70 + 'ms'));
-      const io = new IntersectionObserver(entries => entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-      els.forEach(el => io.observe(el));
-    })();
-
-    // Aktiver Menüpunkt beim Scrollen
-    (function () {
-      if (!('IntersectionObserver' in window)) return;
-      const links = [...document.querySelectorAll('#primary-nav a')];
-      const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
-      const io = new IntersectionObserver(entries => entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        const a = byId.get(e.target.id);
-        links.forEach(l => l.classList.toggle('is-active', l === a));
-      }), { rootMargin: '-45% 0px -50% 0px' });
-      byId.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
-      const hero = document.querySelector('.hero'); if (hero) io.observe(hero);
-    })();
-  </script>
+  <script src="app.js" defer></script>
 </body>
 </html>

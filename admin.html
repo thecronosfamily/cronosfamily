@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CROFAM Poll Admin</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin { max-width: 980px; margin: 0 auto; padding: 48px var(--gutter) 100px; display: grid; gap: 22px; }
+    .admin h1 { font-size: clamp(30px, 4vw, 42px); }
+    .admin h2 { font-size: 22px; margin-bottom: 14px; }
+    .box { padding: 24px; border-radius: 22px; background: var(--panel); border: 1px solid var(--line-strong); }
+    .box.gold { border-color: rgba(255, 194, 71, .5); }
+    .field { display: grid; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 14px; font-weight: 700; color: #d6e3f7; }
+    .field small { color: var(--muted); font-size: 13px; }
+    .field input, .field textarea { width: 100%; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--line-strong); background: rgba(0, 0, 0, .3); color: var(--text); font: 500 15px var(--font); }
+    .field textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+    .field input:focus, .field textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .msg { margin: 12px 0 0; font-size: 14px; color: #c9d7ee; }
+    .msg.err { color: #ffb4a8; } .msg.ok { color: #8ff0c4; }
+    .msg:empty { display: none; }
+    .plist { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .plist li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 16px; padding: 14px 16px; border-radius: 14px; background: rgba(255, 255, 255, .03); border: 1px solid var(--line); }
+    .plist strong { display: block; }
+    .plist small { color: var(--muted); }
+    .danger { border-color: rgba(255, 120, 100, .6) !important; color: #ffc9bf !important; }
+    .stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .stats span { padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line-strong); font-size: 13px; }
+    .prog { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden; margin-top: 12px; }
+    .prog span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #f2a922, #ffd76a); }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="admin">
+    <div>
+      <a class="brand" href="index.html"><img src="assets/crofam-logo-96.png" alt="" width="40" height="40"><span>The Cronos Family</span></a>
+      <h1 style="margin-top:24px">Poll admin</h1>
+      <p class="muted">Start and end polls for Lionhearts holders. A new poll appears on the start page within a minute.</p>
+    </div>
+
+    <section class="box gold" aria-labelledby="h-login">
+      <h2 id="h-login">Sign in</h2>
+      <div class="row">
+        <div class="field"><label for="api">Vote server address</label><input id="api" type="url" placeholder="https://crofam-votes.yourname.workers.dev" autocomplete="off"><small>The address of your Cloudflare Worker.</small></div>
+        <div class="field"><label for="token">Admin token</label><input id="token" type="password" autocomplete="off"><small>Stays in this browser tab only and is forgotten when you close it.</small></div>
+      </div>
+      <div class="actions"><button class="button button-solid" type="button" id="login">Sign in</button></div>
+      <p class="msg" id="login-msg" role="status"></p>
+    </section>
+
+    <section class="box" aria-labelledby="h-new" id="sec-new" hidden>
+      <h2 id="h-new">Start a new poll</h2>
+      <form id="new-poll" novalidate>
+        <div class="field"><label for="title">Question</label><input id="title" maxlength="140" value="How do we push CROFAM forward next?"></div>
+        <div class="field"><label for="desc">Description (optional)</label><textarea id="desc" maxlength="800" placeholder="What happens with the result, for example how much the treasury will use."></textarea></div>
+        <div class="field"><label for="opts">Options, one per line (2 to 8)</label>
+          <textarea id="opts" rows="5">Buy OBS and supply OBS/CROFAM V3 Liquidity
+Supply CROFAM/WCRO Liquidity
+Buy CROFAM
+Supply Solo WCRO Liquidity to secure the chart on the downside</textarea></div>
+        <div class="row">
+          <div class="field"><label for="start">Start</label><input id="start" type="datetime-local"><small>Leave as is to start right away.</small></div>
+          <div class="field"><label for="end">End</label><input id="end" type="datetime-local"><small>Times are in your local time zone.</small></div>
+        </div>
+        <div class="actions"><button class="button button-solid" type="submit">Start poll</button></div>
+        <p class="msg" id="new-msg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="box" aria-labelledby="h-list" id="sec-list" hidden>
+      <div class="actions" style="justify-content:space-between"><h2 id="h-list" style="margin:0">Polls</h2><button class="button button-ghost" type="button" id="reload">Refresh</button></div>
+      <ul class="plist" id="plist" style="margin-top:14px"></ul>
+      <p class="msg" id="list-msg" role="status"></p>
+    </section>
+
+    <section class="box" aria-labelledby="h-set" id="sec-set" hidden>
+      <h2 id="h-set">Lionhearts settings</h2>
+      <p class="muted" style="margin-top:0">Fill these in after the mint. Voting only works once the contract is set.</p>
+      <div class="field"><label for="contract">Lionhearts NFT contract on Cronos</label><input id="contract" placeholder="0x…" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="tattoos">Project tattoos, one per line</label><textarea id="tattoos" placeholder="Write each name exactly as it appears in the NFT metadata."></textarea><small>Every different tattoo from this list adds 0.05x to a holder's votes. Holders with all of them get x2.</small></div>
+      <div class="actions"><button class="button button-solid" type="button" id="save-set">Save settings</button></div>
+      <p class="msg" id="set-msg" role="status"></p>
+      <hr style="border:0;border-top:1px solid var(--line);margin:24px 0">
+      <h2>Rarity and tattoo snapshot</h2>
+      <p class="muted" style="margin-top:0">Reads the rarity and tattoos of all 777 lions from their metadata and stores them on the vote server. Run it once after the reveal, and again if the metadata changes. It takes a few minutes.</p>
+      <div class="actions"><button class="button button-gold" type="button" id="read-traits">Read traits from the contract</button><button class="button button-solid" type="button" id="up-traits" hidden>Upload to the vote server</button></div>
+      <div class="prog" id="prog" hidden><span></span></div>
+      <p class="msg" id="tr-msg" role="status"></p>
+      <div class="stats" id="tr-stats"></div>
+    </section>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const RPCS = ['https://evm.cronos.org', 'https://cronos-evm-rpc.publicnode.com'];
+    const RARITIES = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
+    const IPFS = 'https://ipfs.io/ipfs/';
+    const DEFAULT_TATTOOS = ['BARK', 'CAW', 'CROFAM', 'Crobinhood', 'Crobone', 'Croots', 'Kult', 'Loaded', 'MERY', 'Obsidian', 'Ultcat', 'Ultdeg', 'Ulti', 'Ulton', 'Wolfswap'];
+    let API = '', TOKEN = '', traits = null;
+    try { $('api').value = localStorage.getItem('crofam-vote-api') || 'https://crofam-votes.thecronosfamily.workers.dev'; $('token').value = sessionStorage.getItem('crofam-admin') || ''; } catch (e) { /* ohne Speicher */ }
+    const pad2 = n => String(n).padStart(2, '0');
+    const local = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    $('start').value = local(new Date()); $('end').value = local(new Date(Date.now() + 7 * 864e5));
+    function msg(id, text, kind) { const m = $(id); m.textContent = text; m.className = 'msg' + (kind ? ' ' + kind : ''); }
+    async function call(method, path, body) {
+      const res = await fetch(API + path, { method, headers: { authorization: 'Bearer ' + TOKEN, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+      const j = await res.json().catch(() => ({ ok: false, error: 'The server sent no readable answer.' }));
+      if (!j.ok) throw new Error(j.error || 'Request failed.'); return j;
+    }
+    $('login').addEventListener('click', async () => {
+      API = $('api').value.trim().replace(/\/$/, ''); TOKEN = $('token').value.trim();
+      if (!/^(https:\/\/|http:\/\/localhost)/.test(API)) return msg('login-msg', 'Enter the full server address starting with https://.', 'err');
+      try {
+        await call('GET', '/admin/check');
+        try { localStorage.setItem('crofam-vote-api', API); sessionStorage.setItem('crofam-admin', TOKEN); } catch (e) { /* egal */ }
+        msg('login-msg', 'Signed in.', 'ok'); ['sec-new', 'sec-list', 'sec-set'].forEach(id => { $(id).hidden = false; });
+        loadPolls(); loadSettings();
+      } catch (e) { msg('login-msg', e.message === 'Failed to fetch' ? 'The server could not be reached. Check the address.' : e.message, 'err'); }
+    });
+    $('new-poll').addEventListener('submit', async e => {
+      e.preventDefault();
+      const options = $('opts').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const startsAt = new Date($('start').value).getTime(), endsAt = new Date($('end').value).getTime();
+      try {
+        const j = await call('POST', '/admin/polls', { title: $('title').value, description: $('desc').value, options, startsAt: startsAt || Date.now(), endsAt });
+        msg('new-msg', `Poll #${j.id} started. It shows on the start page within a minute.`, 'ok'); loadPolls();
+      } catch (err) { msg('new-msg', err.message, 'err'); }
+    });
+    async function loadPolls() {
+      try {
+        const j = await (await fetch(API + '/polls')).json(); const ul = $('plist'); ul.replaceChildren();
+        if (!j.polls.length) { msg('list-msg', 'No polls yet.'); return; } msg('list-msg', '');
+        j.polls.forEach(p => {
+          const li = document.createElement('li'), info = document.createElement('div'), t = document.createElement('strong'), s = document.createElement('small');
+          t.textContent = `#${p.id} ${p.title}`;
+          const lead = p.options.reduce((a, o, i) => o.votes > (a.v || 0) ? { i, v: o.votes } : a, {});
+          s.textContent = `${p.status} · ${new Date(p.startsAt).toLocaleString()} to ${new Date(p.endsAt).toLocaleString()} · ${p.totalVotes} votes from ${p.voters} wallets` + (lead.v ? ` · leading: ${p.options[lead.i].label}` : '');
+          info.append(t, s); const act = document.createElement('div'); act.className = 'actions';
+          if (p.status !== 'closed') { const b = document.createElement('button'); b.className = 'button button-ghost'; b.type = 'button'; b.textContent = 'End now'; b.onclick = async () => { await call('POST', `/admin/polls/${p.id}/close`).catch(e => msg('list-msg', e.message, 'err')); loadPolls(); }; act.append(b); }
+          const del = document.createElement('button'); del.className = 'button button-ghost danger'; del.type = 'button'; del.textContent = 'Delete';
+          del.onclick = async () => { if (del.dataset.sure !== '1') { del.dataset.sure = '1'; del.textContent = 'Click again to delete with all votes'; return; } await call('DELETE', `/admin/polls/${p.id}`).catch(e => msg('list-msg', e.message, 'err')); loadPolls(); };
+          act.append(del); li.append(info, act); ul.append(li);
+        });
+      } catch (e) { msg('list-msg', 'The polls could not be loaded.', 'err'); }
+    }
+    $('reload').addEventListener('click', loadPolls);
+    async function loadSettings() {
+      try { const j = await (await fetch(API + '/settings')).json(); $('contract').value = j.contract || ''; $('tattoos').value = (j.projectTattoos && j.projectTattoos.length ? j.projectTattoos : DEFAULT_TATTOOS).join('\n'); if (j.traitsLoaded) msg('tr-msg', `${j.traitsLoaded} lions are stored on the vote server.`, 'ok'); } catch (e) { /* egal */ }
+    }
+    $('save-set').addEventListener('click', async () => {
+      try { await call('PUT', '/admin/settings', { contract: $('contract').value.trim(), projectTattoos: $('tattoos').value.split('\n').map(s => s.trim()).filter(Boolean) }); msg('set-msg', 'Settings saved. The website uses them within a minute.', 'ok'); }
+      catch (e) { msg('set-msg', e.message, 'err'); }
+    });
+
+    /* ---- Traits aus den Metadaten lesen ---- */
+    async function rpc(calls) {
+      const body = JSON.stringify(calls.map((c, i) => ({ jsonrpc: '2.0', id: i, method: 'eth_call', params: [{ to: c[0], data: c[1] }, 'latest'] })));
+      for (const u of RPCS) { try { const j = await (await fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body })).json(); const a = Array.isArray(j) ? j : [j]; return calls.map((_, i) => (a.find(x => x.id === i) || {}).result || null); } catch (e) { /* nächster */ } }
+      throw new Error('rpc');
+    }
+    function decodeString(hex) { const h = hex.slice(2), off = parseInt(h.slice(0, 64), 16) * 2, len = parseInt(h.slice(off, off + 64), 16); return new TextDecoder().decode(new Uint8Array((h.slice(off + 64, off + 64 + len * 2).match(/../g) || []).map(x => parseInt(x, 16)))); }
+    const gw = u => u.replace(/^ipfs:\/\/(ipfs\/)?/, IPFS);
+    $('read-traits').addEventListener('click', async () => {
+      const c = $('contract').value.trim();
+      if (!/^0x[0-9a-fA-F]{40}$/.test(c)) return msg('tr-msg', 'Enter and save the contract address first.', 'err');
+      const bar = $('prog'); bar.hidden = false; $('up-traits').hidden = true; $('tr-stats').replaceChildren();
+      const ids = [...Array(777)].map((_, i) => i + 1), uris = [];
+      try {
+        msg('tr-msg', 'Reading token addresses…');
+        for (let i = 0; i < ids.length; i += 50) uris.push(...await rpc(ids.slice(i, i + 50).map(id => [c, '0xc87b56dd' + BigInt(id).toString(16).padStart(64, '0')])));
+      } catch (e) { return msg('tr-msg', 'The Cronos network could not be reached.', 'err'); }
+      traits = {}; let done = 0, failed = 0; const values = new Map(), counts = {};
+      async function worker() {
+        while (ids.length) {
+          const id = ids.shift(), raw = uris[id - 1];
+          try {
+            const uri = raw ? decodeString(raw) : ''; let meta;
+            if (uri.startsWith('data:application/json;base64,')) meta = JSON.parse(atob(uri.split(',')[1]));
+            else meta = await (await fetch(gw(uri))).json();
+            const attrs = Array.isArray(meta.attributes) ? meta.attributes : [], tt = a => String(a.trait_type || '').toLowerCase();
+            const rv = String((attrs.find(a => tt(a) === 'rarity') || {}).value || '').toLowerCase();
+            const r = RARITIES.find(k => rv.includes(k)) || 'common';
+            const t = attrs.filter(a => tt(a).includes('tattoo')).flatMap(a => [String(a.value || ''), String(a.trait_type || '')]).filter(v => v && !/^(none|tattoo)$/i.test(v.trim()));
+            t.forEach(v => values.set(v, (values.get(v) || 0) + 1)); counts[r] = (counts[r] || 0) + 1; traits[id] = { r, t };
+          } catch (e) { failed++; }
+          done++; bar.firstElementChild.style.width = (done / 777 * 100) + '%'; msg('tr-msg', `Reading metadata… ${done} / 777`);
+        }
+      }
+      await Promise.all([...Array(8)].map(worker));
+      msg('tr-msg', `Read ${Object.keys(traits).length} lions${failed ? `, ${failed} failed (they count as Common)` : ''}. Check the numbers, then upload.`, failed ? 'err' : 'ok');
+      const st = $('tr-stats'); RARITIES.forEach(r => { const s = document.createElement('span'); s.textContent = `${r}: ${counts[r] || 0}`; st.append(s); });
+      [...values.entries()].sort((a, b) => b[1] - a[1]).forEach(([v, n]) => { const s = document.createElement('span'); s.textContent = `Tattoo "${v}": ${n}`; st.append(s); });
+      $('up-traits').hidden = false;
+    });
+    $('up-traits').addEventListener('click', async () => {
+      try { const j = await call('PUT', '/admin/traits', { traits }); msg('tr-msg', `${j.count} lions stored on the vote server.`, 'ok'); $('up-traits').hidden = true; }
+      catch (e) { msg('tr-msg', e.message, 'err'); }
+    });
+  })();
+  </script>
+</body>
+</html>

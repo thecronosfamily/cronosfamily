@@ -592,3 +592,140 @@ p { margin: 0 0 1em; }
   .hero-inner { padding-top: 28px; }
   .hero-lead { font-size: 17px; }
 }
+
+/* =================== Kompakte Handy-Ansicht =================== */
+@media (max-width: 720px) {
+  .section { padding: 52px 0; }
+  h2 { font-size: 32px; }
+  .section-label { margin-bottom: 12px; }
+
+  /* Hero: Logo klein links, "We are the CROFAM" daneben wie am Desktop */
+  .hero-inner { grid-template-columns: 84px minmax(0, 1fr); gap: 16px 16px; padding: 22px var(--gutter) 16px; align-items: center; text-align: left; }
+  .hero-copy { display: contents; }
+  .hero-logo { grid-column: 1; grid-row: 1; width: 84px; }
+  .hero h1 { grid-column: 2; grid-row: 1; }
+  .h1-small { font-size: 13px; letter-spacing: .2em; }
+  .h1-big { font-size: clamp(40px, 13.5vw, 60px); line-height: .95; }
+  .hero-lead, .hero-actions, .mint-card { grid-column: 1 / -1; }
+  .hero-lead { margin: 0; max-width: none; font-size: 16px; line-height: 1.5; }
+  .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0; }
+  .hero-actions .button { justify-content: center; padding: 12px 10px; font-size: 14px; }
+  #hero-vote { grid-column: 1 / -1; }
+  .mint-card { margin-top: 0; padding: 14px; gap: 12px; }
+  .mint-title { font-size: 16px; }
+  .mint-sub { font-size: 13px; }
+  .countdown span { padding: 6px 4px 4px; }
+  .countdown b { font-size: 22px; }
+  .mint-card .button { justify-content: center; width: 100%; }
+  .live-stats { padding-bottom: 16px; }
+  .live-stats dl > div { padding: 10px 14px; }
+  .live-stats dd { font-size: 18px; }
+
+  /* Lionhearts: Rarity-Stufen als kompakte Zeilen, Bild links, Text rechts */
+  .lh-title { font-size: 52px; }
+  .lh-sub { font-size: 16px; }
+  .lh-facts { grid-template-columns: repeat(4, auto); gap: 6px 14px; }
+  .lh-facts div { padding-left: 10px; }
+  .lh-facts dd { font-size: 22px; }
+  .tiers { grid-template-columns: 1fr; gap: 10px; }
+  .tier, .tier-legendary { flex-direction: row; align-items: stretch; margin: 0 !important; max-width: none; width: 100%; grid-column: auto; border-radius: 18px; }
+  .tier img { flex: none; width: 108px; height: auto; min-height: 108px; aspect-ratio: auto; object-fit: cover; border-radius: 16px 0 0 16px; }
+  .tier-badge { display: none; }
+  .one-of-one { top: -10px; right: -8px; width: 40px; height: 40px; font-size: 13px; }
+  .tier-body { flex: 1; min-width: 0; align-items: flex-start; gap: 4px; padding: 10px 12px; text-align: left; }
+  .tier h4 { font-size: 18px; }
+  .tier p { min-height: 0; font-size: 13px; }
+  .hearts i { width: 12px; height: 11px; }
+  .hearts { gap: 4px; }
+  .floor { flex-direction: row; justify-content: flex-start; gap: 6px; width: auto; margin-top: 2px; padding: 0; background: none; border: 0; }
+  .floor span { font-size: 12px; }
+  .floor strong { font-size: 13px; color: var(--tc); }
+  .mint-box { display: none; }   /* steht auf dem Handy schon als Mint-Karte im Hero */
+  .mint-when img { width: 44px; height: 44px; }
+  .mint-v { font-size: 18px; }
+  .lh-utility { gap: 10px; }
+  .util-card { padding: 16px; gap: 12px; }
+  .util-card h3 { font-size: 19px; }
+  .util-card p { font-size: 14px; }
+  .vault { margin-top: 32px; }
+  .vault-side, .vault-main { padding: 18px 16px; }
+  .vault-side { gap: 12px; }
+
+  /* Staking */
+  .stake-head { margin-bottom: 18px; }
+  .stake-card { padding: 18px 16px; }
+  .stake-card h3 { margin-bottom: 12px; }
+  .supply-chart svg { max-width: 200px; }
+  .stake-token-body { gap: 16px; padding-top: 16px; }
+  .stake-token .supply-legend { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .stake-token .supply-legend li { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px; }
+  .stake-token .supply-legend small { display: none; }
+  .stake-token .supply-legend .supply-value { font-size: 18px; }
+  .stake-nft-art { max-width: 260px; margin-bottom: 12px; }
+  .stake-steps li { padding: 8px 12px; font-size: 13px; }
+  .stake-card .row-actions { padding-top: 16px; }
+
+  /* Treasury: ohne Bild, Holdings als schlanke Liste */
+  .tr-side { display: none; }
+  .tr-total { padding: 20px 18px; }
+  .tr-road { margin-top: 22px; }
+  .tr-holdings { padding: 18px 16px; }
+  .tr-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 10px 0; }
+  .tr-table td { display: block; width: auto; padding: 0; }
+  .tr-table td::before { content: none; }
+  .tr-table td:nth-child(1) { grid-column: 1; grid-row: 1; margin: 0; }
+  .tr-table td:nth-child(2) { grid-column: 1; grid-row: 2; padding-left: 20px; font-size: 12px; color: var(--muted); }
+  .tr-table td:nth-child(3) { grid-column: 2; grid-row: 1; text-align: right; }
+  .tr-table td:nth-child(4) { display: none; }
+  .tr-table td:nth-child(5) { grid-column: 2; grid-row: 2; text-align: right; font-size: 12px; }
+  .tr-table .asset small { display: none; }
+  .tr-addresses { gap: 10px; }
+
+  /* Roadmap: nur Titel und Status, Beschreibung nur beim laufenden Punkt */
+  .roadmap-heading { margin-bottom: 16px; }
+  .roadmap-list { gap: 6px; padding-left: 34px; }
+  .roadmap-list::before { left: 11px; top: 14px; bottom: 14px; }
+  .milestone-check { left: -34px; width: 24px; height: 24px; }
+  .roadmap-item.is-done .milestone-check::after { left: 7px; top: 3px; width: 6px; height: 11px; border-width: 0 2.5px 2.5px 0; }
+  .roadmap-item.is-progress .milestone-check::after { inset: 5px; }
+  .roadmap-item { flex-wrap: nowrap; gap: 10px; padding: 10px 12px; border-radius: 14px; }
+  .roadmap-item:not(.is-progress) .milestone-content small { display: none; }
+  .milestone-content strong { font-size: 15px; }
+  .milestone-content small { font-size: 13px; }
+  .milestone-status { padding: 4px 9px; font-size: 11px; }
+
+  /* Vision, Buy, Abschluss */
+  .vision-art { max-width: 240px; }
+  .vision-lead { font-size: 24px; }
+  .vision-cols { margin-top: 22px; padding-top: 18px; }
+  .vision-cols p { font-size: 16px; }
+  .buy-head { margin-bottom: 18px; }
+  .buy-list { gap: 10px; }
+  .buy-card { padding: 16px; gap: 6px; }
+  .buy-card h3 { font-size: 21px; }
+  .buy-card p { font-size: 14px; margin-bottom: 6px; }
+  .closing { padding: 60px var(--gutter); }
+  .closing img { width: 80px; height: 80px; margin-bottom: 18px; }
+  .closing-links { margin-top: 22px; }
+}
+
+/* Variante "Raster": auf dem Handy 3 + 2 Karten nebeneinander (Klasse tiers-grid am <ol class="tiers">) */
+@media (max-width: 720px) {
+  .tiers.tiers-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px 8px; padding-top: 6px; align-items: stretch; }
+  .tiers-grid .tier-body { flex: 1; }
+  .tiers-grid .floor { margin-top: auto !important; padding-top: 3px; }
+  .tiers-grid .tier { grid-column: span 2; flex-direction: column; border-radius: 14px; }
+  .tiers-grid .tier-epic { grid-column: 2 / span 2; }
+  .tiers-grid .tier-legendary { grid-column: 4 / span 2; }
+  .tiers-grid .tier img { width: 100%; min-height: 0; aspect-ratio: 1; border-radius: 12px 12px 0 0; }
+  .tiers-grid .tier-badge { display: block; top: -10px; padding: 2px 8px; font-size: 9px; letter-spacing: .08em; }
+  .tiers-grid .tier-body { align-items: center; gap: 3px; padding: 7px 6px 8px; text-align: center; }
+  .tiers-grid .tier h4 { font-size: 13px; letter-spacing: .02em; }
+  .tiers-grid .tier p { font-size: 11px; line-height: 1.3; }
+  .tiers-grid .hearts { gap: 3px; }
+  .tiers-grid .hearts i { width: 10px; height: 9px; }
+  .tiers-grid .floor { justify-content: center; margin-top: 3px; }
+  .tiers-grid .floor span { display: none; }
+  .tiers-grid .floor strong { font-size: 11.5px; }
+  .tiers-grid .one-of-one { top: -12px; right: -6px; width: 34px; height: 34px; font-size: 11px; }
+}

@@ -322,6 +322,7 @@ p { margin: 0 0 1em; }
 .header-wallet:hover { background: rgba(255, 194, 71, .16); border-color: var(--gold); }
 .header-wallet .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, .3); }
 .header-wallet.is-connected .dot { background: #3ee39b; box-shadow: 0 0 10px #3ee39b; }
+.wallet-icon { display: none; width: 22px; height: 22px; }
 .nav-mobile-only { display: none; }
 .vault { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 0; margin-top: 56px; border-radius: 28px; border: 1.5px solid rgba(255, 194, 71, .45); background: var(--panel); overflow: hidden; scroll-margin-top: calc(var(--header-h) + 16px); }
 .vault-side { padding: clamp(22px, 3vw, 34px); background: rgba(2, 9, 26, .45); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 16px; }
@@ -541,7 +542,14 @@ p { margin: 0 0 1em; }
   .live-stats dl > div:first-child { grid-column: 1 / -1; border-top: 0; }
   .live-stats dl > div:nth-child(odd):not(:first-child) { border-left: 1px solid var(--line); }
   .tr-addresses { grid-template-columns: 1fr; }
-  .header-wallet { display: none; }
+  .header-wallet { order: 2; position: relative; justify-content: center; width: 44px; height: 44px; margin-left: auto; padding: 0; border-radius: 12px; }
+  .header-wallet .wallet-icon { display: block; }
+  .header-wallet #wallet-header-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .header-wallet .dot { position: absolute; top: 7px; right: 7px; }
+  .header-wallet:not(.is-connected) .dot { display: none; }
+  .menu-toggle { order: 3; margin-left: 0; }
+  .site-header { gap: 10px; }
+  .brand { margin-right: auto; }
   .nav-mobile-only { display: block; }
   .lh-utility, .buy-list { grid-template-columns: 1fr; }
   .vault { grid-template-columns: 1fr; }
@@ -600,12 +608,12 @@ p { margin: 0 0 1em; }
   .section-label { margin-bottom: 12px; }
 
   /* Hero: Logo klein links, "We are the CROFAM" daneben wie am Desktop */
-  .hero-inner { grid-template-columns: 84px minmax(0, 1fr); gap: 16px 16px; padding: 22px var(--gutter) 16px; align-items: center; text-align: left; }
+  .hero-inner { grid-template-columns: 112px minmax(0, 1fr); gap: 16px 16px; padding: 22px var(--gutter) 16px; align-items: center; text-align: left; }
   .hero-copy { display: contents; }
-  .hero-logo { grid-column: 1; grid-row: 1; width: 84px; }
+  .hero-logo { grid-column: 1; grid-row: 1; width: 112px; }
   .hero h1 { grid-column: 2; grid-row: 1; }
-  .h1-small { font-size: 13px; letter-spacing: .2em; }
-  .h1-big { font-size: clamp(40px, 13.5vw, 60px); line-height: .95; }
+  .h1-small { font-size: 11px; letter-spacing: .2em; }
+  .h1-big { font-size: clamp(34px, 11vw, 46px); line-height: .95; }
   .hero-lead, .hero-actions, .mint-card { grid-column: 1 / -1; }
   .hero-lead { margin: 0; max-width: none; font-size: 16px; line-height: 1.5; }
   .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0; }

@@ -9,6 +9,8 @@
   const WCRO = '0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23';
   const STAKING = '0xb92a381AB51DDfD21F81243671F46E67256DDB20';   // WolfSwap staking contract
   const TREASURY = '0xeef6783014abeC80397B67e259Df1DBbE5f94A19';
+  const OBS_PM = '0xe1a0f7944b00fee6f130a44c6d0482b19618b30c';        // Obsidian V3 Positions (NFT-Positionen)
+  const OBS_FACTORY = '0x1638a449e99693fcb617380c5c3863df816c3b0b';   // Obsidian V3 Factory
   const RPCS = ['https://evm.cronos.org', 'https://cronos-evm-rpc.publicnode.com'];
   const pad = a => a.toLowerCase().replace('0x', '').padStart(64, '0');
 
@@ -614,7 +616,8 @@
     // zuletzt bekannte Werte (16. Nov 2026), werden live überschrieben
     const state = {
       prices: { crofamCro: 0.001187, croUsd: 0.04239 },
-      bal: { staked: 237585962.45, crofam: 8924.771, wcro: 132.676, cro: 18.7789 },
+      bal: { staked: 237585962.45, crofam: 8924.771, wcro: 132.676, cro: 18.7789, lpCrofam: 258305.34, lpWcro: 304.698 },
+      lp: { ids: [427], inRange: true },
       live: false, updated: null
     };
     const nf = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -624,7 +627,11 @@
       { key: 'staked', name: 'Staked $CROFAM', sub: 'In WolfSwap staking', color: '#00e5ff', sym: 'CROFAM', toCro: b => b * state.prices.crofamCro },
       { key: 'crofam', name: '$CROFAM', sub: 'In the wallet', color: '#ffc247', sym: 'CROFAM', toCro: b => b * state.prices.crofamCro },
       { key: 'wcro', name: 'WCRO', sub: 'Wrapped CRO', color: '#7a8cff', sym: 'WCRO', toCro: b => b },
-      { key: 'cro', name: 'CRO', sub: 'Native balance', color: '#b9c7e6', sym: 'CRO', toCro: b => b }
+      { key: 'cro', name: 'CRO', sub: 'Native balance', color: '#b9c7e6', sym: 'CRO', toCro: b => b },
+      { key: 'lp', name: 'CROFAM/WCRO V3 Liquidity', color: '#3ee39b', lp: true,
+        sub: () => `Obsidian V3 position ${state.lp.ids.map(i => '#' + i).join(', ')}${state.lp.inRange ? ', in range' : ', out of range'}`,
+        amountText: () => `${nf(state.bal.lpCrofam)} CROFAM + ${nf(state.bal.lpWcro, 2)} WCRO`,
+        toCro: () => state.bal.lpCrofam * state.prices.crofamCro + state.bal.lpWcro }
     ];
     let shownTotal = 0;
     function animateTo(el, to) {
@@ -633,13 +640,13 @@
       (function step(now) { const k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3); el.textContent = nf(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); })(t0);
     }
     function render() {
-      const rows = ASSETS.map(a => ({ ...a, amount: state.bal[a.key], cro: a.toCro(state.bal[a.key]) }));
+      const rows = ASSETS.map(a => ({ ...a, amount: state.bal[a.key], cro: a.toCro(state.bal[a.key]) })).filter(r => !r.lp || r.cro > 0);
       const total = rows.reduce((s, r) => s + r.cro, 0), usd = total * state.prices.croUsd;
       animateTo($('#tr-total-cro'), total);
       $('#tr-total-usd').textContent = '$' + nf(usd) + ' USD';
       $('#tr-kpi-staked').textContent = short(state.bal.staked);
-      // Anteil am Gesamtsupply: alle $CROFAM der Treasury (gestakt + in der Wallet) / 1.000.000.000
-      $('#tr-kpi-share').textContent = nf((state.bal.staked + state.bal.crofam) / TOTAL_SUPPLY * 100, 1) + '%';
+      // Anteil am Gesamtsupply: alle $CROFAM der Treasury (gestakt + Wallet + in der V3-Liquidity) / 1.000.000.000
+      $('#tr-kpi-share').textContent = nf((state.bal.staked + state.bal.crofam + state.bal.lpCrofam) / TOTAL_SUPPLY * 100, 1) + '%';
       const goal = GOALS.find(g => g > total) || GOALS[GOALS.length - 1], pct = Math.min(total / goal * 100, 100);
       $('#tr-goal-label').textContent = nf(goal) + ' CRO';
       $('#tr-goal-pct').textContent = nf(pct, 1) + '%';
@@ -654,8 +661,8 @@
         const tr = document.createElement('tr'), share = total ? r.cro / total * 100 : 0;
         const cell = (label, html) => { const td = document.createElement('td'); td.dataset.label = label; td.append(...html); return td; };
         const name = document.createElement('span'); name.className = 'asset'; name.style.setProperty('--c', r.color);
-        const b = document.createElement('strong'); b.textContent = r.name; const s = document.createElement('small'); s.textContent = r.sub; name.append(b, s);
-        tr.append(cell('Asset', [name]), cell('Amount', [nf(r.amount, r.amount < 1000 ? 2 : 0) + ' ' + r.sym]), cell('Value in CRO', [nf(r.cro, r.cro < 100 ? 2 : 0) + ' CRO']),
+        const b = document.createElement('strong'); b.textContent = r.name; const s = document.createElement('small'); s.textContent = typeof r.sub === 'function' ? r.sub() : r.sub; name.append(b, s);
+        tr.append(cell('Asset', [name]), cell('Amount', [r.amountText ? r.amountText() : nf(r.amount, r.amount < 1000 ? 2 : 0) + ' ' + r.sym]), cell('Value in CRO', [nf(r.cro, r.cro < 100 ? 2 : 0) + ' CRO']),
           cell('Value in USD', ['$' + nf(r.cro * state.prices.croUsd, 2)]), cell('Share', [nf(share, share < 1 ? 2 : 1) + '%']));
         return tr;
       }));
@@ -691,13 +698,56 @@
       if (!r) return null;
       return { staked: units(r[0]), crofam: units(r[1]), wcro: units(r[2]), cro: units(r[3]) };
     }
+    /* Obsidian V3: alle CROFAM/WCRO-Positionen der Treasury, exakt aus Kurs, Preisspanne und offenen Gebühren */
+    async function loadLp() {
+      const M256 = 2n ** 256n, md = x => ((x % M256) + M256) % M256;
+      const words = h => (h.slice(2).match(/.{64}/g) || []).map(w => BigInt('0x' + w));
+      const s24 = v => Number(v >= 2n ** 255n ? v - M256 : v), enc = t => md(BigInt(t)).toString(16).padStart(64, '0');
+      const w64 = n => BigInt(n).toString(16).padStart(64, '0');
+      const bal = await rpcBatch([['eth_call', [{ to: OBS_PM, data: '0x70a08231' + pad(TREASURY) }, 'latest']]]);
+      if (!bal) return null;
+      const n = Number(bal[0] || 0n); if (!n) return { crofam: 0, wcro: 0, ids: [], inRange: true };
+      const ids = await rpcBatch([...Array(n)].map((_, i) => ['eth_call', [{ to: OBS_PM, data: '0x2f745c59' + pad(TREASURY) + w64(i) }, 'latest']]));
+      if (!ids) return null;
+      const pos = await rpcBatch(ids.map(id => ['eth_call', [{ to: OBS_PM, data: '0x99fbab88' + w64(id) }, 'latest']]), true);
+      if (!pos) return null;
+      let crofam = 0, wcro = 0, inRange = true; const used = [];
+      for (let k = 0; k < ids.length; k++) {
+        if (!pos[k]) continue;
+        const W = words(pos[k]), t0 = '0x' + W[2].toString(16).padStart(40, '0'), t1 = '0x' + W[3].toString(16).padStart(40, '0');
+        const pair = [t0, t1].sort().join();
+        if (pair !== [TOKEN, WCRO].sort().join()) continue;   // nur CROFAM/WCRO
+        const fee = W[4], tl = s24(W[5]), tu = s24(W[6]), L = W[7];
+        const pw = await rpcBatch([['eth_call', [{ to: OBS_FACTORY, data: '0x1698ee82' + pad(t0) + pad(t1) + w64(fee) }, 'latest']]], true);
+        if (!pw || !pw[0]) return null;
+        const pool = '0x' + pw[0].slice(-40);
+        const r = await rpcBatch([['eth_call', [{ to: pool, data: '0x3850c7bd' }, 'latest']], ['eth_call', [{ to: pool, data: '0xf3058399' }, 'latest']],
+          ['eth_call', [{ to: pool, data: '0x46141319' }, 'latest']], ['eth_call', [{ to: pool, data: '0xf30dba93' + enc(tl) }, 'latest']],
+          ['eth_call', [{ to: pool, data: '0xf30dba93' + enc(tu) }, 'latest']]], true);
+        if (!r || r.some(x => !x)) return null;
+        const s0 = words(r[0]), tick = s24(s0[1]), fg = [BigInt(r[1]), BigInt(r[2])], lo = words(r[3]), hi = words(r[4]);
+        const sp = Number(s0[0]) / 2 ** 96, sa = Math.pow(1.0001, tl / 2), sb = Math.pow(1.0001, tu / 2), Ln = Number(L);
+        let a0, a1;
+        if (tick < tl) { a0 = Ln * (sb - sa) / (sa * sb); a1 = 0; inRange = false; }
+        else if (tick >= tu) { a0 = 0; a1 = Ln * (sb - sa); inRange = false; }
+        else { a0 = Ln * (sb - sp) / (sp * sb); a1 = Ln * (sp - sa); }
+        // noch nicht abgeholte Gebühren
+        const inside = j => md(fg[j] - (tick >= tl ? lo[2 + j] : md(fg[j] - lo[2 + j])) - (tick < tu ? hi[2 + j] : md(fg[j] - hi[2 + j])));
+        const f0 = Number(((L * md(inside(0) - W[8])) >> 128n) + W[10]), f1 = Number(((L * md(inside(1) - W[9])) >> 128n) + W[11]);
+        const amt0 = (a0 + f0) / 1e18, amt1 = (a1 + f1) / 1e18;   // beide Token haben 18 Dezimalstellen
+        if (t0 === TOKEN) { crofam += amt0; wcro += amt1; } else { crofam += amt1; wcro += amt0; }
+        used.push(Number(ids[k]));
+      }
+      return { crofam, wcro, ids: used, inRange };
+    }
     let busy = false;
     async function refresh() {
       if (busy) return; busy = true; const status = $('#tr-status'); status.textContent = 'Updating live values…';
-      const [p, b] = await Promise.all([loadPrices(), loadBalances()]);
+      const [p, b, lp] = await Promise.all([loadPrices(), loadBalances(), loadLp().catch(() => null)]);
       if (p) { state.prices = p; publish('prices', p); }
       if (b) Object.keys(b).forEach(k => { if (b[k] !== null) state.bal[k] = b[k]; });
-      state.live = Boolean(p && b);
+      if (lp) { state.bal.lpCrofam = lp.crofam; state.bal.lpWcro = lp.wcro; if (lp.ids.length) state.lp.ids = lp.ids; state.lp.inRange = lp.inRange; }
+      state.live = Boolean(p && b && lp);
       state.updated = Date.now(); render(); busy = false;
       const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       status.textContent = state.live ? `Live, updated at ${t}` : (p || b) ? `Partly live, updated at ${t}. Some sources could not be reached.` : 'Live data is not available right now. Showing the last known values.';

@@ -201,7 +201,7 @@
       rarityTrait: 'rarity',        // trait_type der Seltenheit in den Metadaten
       tattooTrait: 'tattoo',        // trait_type der Tattoos (auch "Tattoo 2" usw.)
       projectTattoos: ['BARK', 'CAW', 'CROFAM', 'Crobinhood', 'Crobone', 'Croots', 'Kult', 'Loaded', 'MERY', 'Obsidian', 'Ultcat', 'Ultdeg', 'Ulti', 'Ulton', 'Wolfswap'],   // Ersatzwerte, die Liste im Admin hat Vorrang
-      legendaryIds: [1, 69, 100, 200, 300, 400, 500, 600, 700, 777],
+      legendaryIds: [1, 100, 200, 212, 300, 400, 500, 600, 700, 777],
       ipfsGateway: 'https://ipfs.io/ipfs/'
     };
     const normTattoo = v => String(v || '').toLowerCase().replace(/^\s*tattoo\b/, '').replace(/\b(kopie|copy)\s*\d*\s*$/, '').replace(/[^a-z0-9]/g, '');

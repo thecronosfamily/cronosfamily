@@ -106,7 +106,7 @@
     function goLive() {
       if (liveMode) return; liveMode = true;
       cd.hidden = true; card.classList.add('is-live');
-      $('#mint-sub').textContent = 'Mint on Ebisus Bay. Whitelist 210 CRO, public 250 CRO.';
+      $('#mint-sub').textContent = 'Mint on Ebisus Bay. Whitelist 212 CRO, public 250 CRO.';
       $('#mint-cta').firstChild.textContent = 'Mint on Ebisus Bay ';
       loadMinted(); mintedTimer = setInterval(() => { if (!document.hidden) loadMinted(); }, 30000);
       bus.addEventListener('update', () => { if ($('#minted').hidden) loadMinted(); });
@@ -617,7 +617,7 @@
     const state = {
       prices: { crofamCro: 0.001187, croUsd: 0.04239 },
       bal: { staked: 237585962.45, crofam: 8924.771, wcro: 132.676, cro: 18.7789, lpCrofam: 258305.34, lpWcro: 304.698 },
-      lp: { ids: [427], inRange: true },
+      lp: { ids: [427], active: 1 },
       live: false, updated: null
     };
     const nf = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -629,7 +629,8 @@
       { key: 'wcro', name: 'WCRO', sub: 'Wrapped CRO', color: '#7a8cff', sym: 'WCRO', toCro: b => b },
       { key: 'cro', name: 'CRO', sub: 'Native balance', color: '#b9c7e6', sym: 'CRO', toCro: b => b },
       { key: 'lp', name: 'CROFAM/WCRO V3 Liquidity', color: '#3ee39b', lp: true,
-        sub: () => `Obsidian V3 position ${state.lp.ids.map(i => '#' + i).join(', ')}${state.lp.inRange ? ', in range' : ', out of range'}`,
+        sub: () => { const n = state.lp.ids.length, ids = state.lp.ids.map(i => '#' + i).join(', ');
+          return n === 1 ? `Obsidian V3 position ${ids}${state.lp.active ? ', in range' : ', waiting outside the price'}` : `${n} Obsidian V3 positions (${ids}), ${state.lp.active} in range`; },
         amountText: () => `${nf(state.bal.lpCrofam)} CROFAM + ${nf(state.bal.lpWcro, 2)} WCRO`,
         toCro: () => state.bal.lpCrofam * state.prices.crofamCro + state.bal.lpWcro }
     ];
@@ -706,12 +707,12 @@
       const w64 = n => BigInt(n).toString(16).padStart(64, '0');
       const bal = await rpcBatch([['eth_call', [{ to: OBS_PM, data: '0x70a08231' + pad(TREASURY) }, 'latest']]]);
       if (!bal) return null;
-      const n = Number(bal[0] || 0n); if (!n) return { crofam: 0, wcro: 0, ids: [], inRange: true };
+      const n = Number(bal[0] || 0n); if (!n) return { crofam: 0, wcro: 0, ids: [], active: 0 };
       const ids = await rpcBatch([...Array(n)].map((_, i) => ['eth_call', [{ to: OBS_PM, data: '0x2f745c59' + pad(TREASURY) + w64(i) }, 'latest']]));
       if (!ids) return null;
       const pos = await rpcBatch(ids.map(id => ['eth_call', [{ to: OBS_PM, data: '0x99fbab88' + w64(id) }, 'latest']]), true);
       if (!pos) return null;
-      let crofam = 0, wcro = 0, inRange = true; const used = [];
+      let crofam = 0, wcro = 0, active = 0; const used = [];
       for (let k = 0; k < ids.length; k++) {
         if (!pos[k]) continue;
         const W = words(pos[k]), t0 = '0x' + W[2].toString(16).padStart(40, '0'), t1 = '0x' + W[3].toString(16).padStart(40, '0');
@@ -728,17 +729,20 @@
         const s0 = words(r[0]), tick = s24(s0[1]), fg = [BigInt(r[1]), BigInt(r[2])], lo = words(r[3]), hi = words(r[4]);
         const sp = Number(s0[0]) / 2 ** 96, sa = Math.pow(1.0001, tl / 2), sb = Math.pow(1.0001, tu / 2), Ln = Number(L);
         let a0, a1;
-        if (tick < tl) { a0 = Ln * (sb - sa) / (sa * sb); a1 = 0; inRange = false; }
-        else if (tick >= tu) { a0 = 0; a1 = Ln * (sb - sa); inRange = false; }
+        // unter dem Kurs: nur token0, über dem Kurs: nur token1 (einseitige Liquidity), dazwischen: beide
+        if (tick < tl) { a0 = Ln * (sb - sa) / (sa * sb); a1 = 0; }
+        else if (tick >= tu) { a0 = 0; a1 = Ln * (sb - sa); }
         else { a0 = Ln * (sb - sp) / (sp * sb); a1 = Ln * (sp - sa); }
         // noch nicht abgeholte Gebühren
         const inside = j => md(fg[j] - (tick >= tl ? lo[2 + j] : md(fg[j] - lo[2 + j])) - (tick < tu ? hi[2 + j] : md(fg[j] - hi[2 + j])));
         const f0 = Number(((L * md(inside(0) - W[8])) >> 128n) + W[10]), f1 = Number(((L * md(inside(1) - W[9])) >> 128n) + W[11]);
         const amt0 = (a0 + f0) / 1e18, amt1 = (a1 + f1) / 1e18;   // beide Token haben 18 Dezimalstellen
+        if (amt0 + amt1 <= 0) continue;   // geschlossene, leere Positionen überspringen
+        if (tick >= tl && tick < tu) active++;
         if (t0 === TOKEN) { crofam += amt0; wcro += amt1; } else { crofam += amt1; wcro += amt0; }
         used.push(Number(ids[k]));
       }
-      return { crofam, wcro, ids: used, inRange };
+      return { crofam, wcro, ids: used, active };
     }
     let busy = false;
     async function refresh() {
@@ -746,7 +750,7 @@
       const [p, b, lp] = await Promise.all([loadPrices(), loadBalances(), loadLp().catch(() => null)]);
       if (p) { state.prices = p; publish('prices', p); }
       if (b) Object.keys(b).forEach(k => { if (b[k] !== null) state.bal[k] = b[k]; });
-      if (lp) { state.bal.lpCrofam = lp.crofam; state.bal.lpWcro = lp.wcro; if (lp.ids.length) state.lp.ids = lp.ids; state.lp.inRange = lp.inRange; }
+      if (lp) { state.bal.lpCrofam = lp.crofam; state.bal.lpWcro = lp.wcro; state.lp.ids = lp.ids; state.lp.active = lp.active; }
       state.live = Boolean(p && b && lp);
       state.updated = Date.now(); render(); busy = false;
       const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

@@ -628,12 +628,22 @@
       { key: 'crofam', name: '$CROFAM', sub: 'In the wallet', color: '#ffc247', sym: 'CROFAM', toCro: b => b * state.prices.crofamCro },
       { key: 'wcro', name: 'WCRO', sub: 'Wrapped CRO', color: '#7a8cff', sym: 'WCRO', toCro: b => b },
       { key: 'cro', name: 'CRO', sub: 'Native balance', color: '#b9c7e6', sym: 'CRO', toCro: b => b },
+      { key: 'rewards', name: 'Lionhearts Staking Rewards Wallet', sub: 'Paid out daily to Lionhearts stakers until 22 Feb 2027', color: '#ff7ab8', sym: 'CROFAM', toCro: b => b * state.prices.crofamCro },
       { key: 'lp', name: 'CROFAM/WCRO V3 Liquidity', color: '#3ee39b', lp: true,
         sub: () => { const n = state.lp.ids.length, ids = state.lp.ids.map(i => '#' + i).join(', ');
           return n === 1 ? `Obsidian V3 position ${ids}${state.lp.active ? ', in range' : ', waiting outside the price'}` : `${n} Obsidian V3 positions (${ids}), ${state.lp.active} in range`; },
         amountText: () => `${nf(state.bal.lpCrofam)} CROFAM + ${nf(state.bal.lpWcro, 2)} WCRO`,
         toCro: () => state.bal.lpCrofam * state.prices.crofamCro + state.bal.lpWcro }
     ];
+    /* Lionhearts Staking Rewards: fest programmiert, keine Wallet-Abfrage.
+       Bis 21.11.2026: 35M. Ab 22.11.2026 (00:00 UTC): 30M, danach jeden Tag gleich viel weniger,
+       am 22.02.2027 ist der Wert 0 und die Zeile verschwindet. */
+    function rewardsLeft(now = Date.now()) {
+      const start = Date.UTC(2026, 10, 22), end = Date.UTC(2027, 1, 22), days = (end - start) / 864e5;   // 92 Tage
+      if (now < start) return 35e6;
+      if (now >= end) return 0;
+      return 30e6 * (1 - Math.floor((now - start) / 864e5) / days);
+    }
     let shownTotal = 0;
     function animateTo(el, to) {
       if (reduceMotion || shownTotal === 0) { el.textContent = nf(to); shownTotal = to; return; }
@@ -641,7 +651,8 @@
       (function step(now) { const k = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3); el.textContent = nf(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); })(t0);
     }
     function render() {
-      const rows = ASSETS.map(a => ({ ...a, amount: state.bal[a.key], cro: a.toCro(state.bal[a.key]) })).filter(r => !r.lp || r.cro > 0);
+      state.bal.rewards = rewardsLeft();
+      const rows = ASSETS.map(a => ({ ...a, amount: state.bal[a.key], cro: a.toCro(state.bal[a.key]) })).filter(r => (!r.lp && r.key !== 'rewards') || r.cro > 0);
       const total = rows.reduce((s, r) => s + r.cro, 0), usd = total * state.prices.croUsd;
       animateTo($('#tr-total-cro'), total);
       $('#tr-total-usd').textContent = '$' + nf(usd) + ' USD';

@@ -201,7 +201,7 @@
       contract: '',                 // TODO: LIONHEARTS-NFT-Contract auf Cronos (nach dem Mint)
       firstId: 1, maxSupply: 777,
       rarityTrait: 'rarity',        // trait_type der Seltenheit in den Metadaten
-      tattooTrait: 'tattoo',        // trait_type der Tattoos (auch "Tattoo 2" usw.)
+      tattooTrait: 'arm',           // trait_type der Projekt-Tattoos im Contract: "Arm Trait", Werte "Tattoo BARK" usw.
       projectTattoos: ['BARK', 'CAW', 'CROFAM', 'Crobinhood', 'Crobone', 'Croots', 'Kult', 'Loaded', 'MERY', 'Obsidian', 'Ultcat', 'Ultdeg', 'Ulti', 'Ulton', 'Wolfswap'],   // Ersatzwerte, die Liste im Admin hat Vorrang
       legendaryIds: [1, 100, 200, 212, 300, 400, 500, 600, 700, 777],
       ipfsGateway: 'https://ipfs.io/ipfs/'
@@ -315,7 +315,9 @@
           let rarity = Object.keys(WEIGHTS).find(k2 => rv.includes(k2) && !(k2 === 'common' && rv.includes('uncommon')));
           let guess = false;
           if (!rarity) { rarity = CFG.legendaryIds.includes(id) ? 'legendary' : 'common'; guess = !CFG.legendaryIds.includes(id); }
-          const tattoos = attrs.filter(a => tt(a).includes(CFG.tattooTrait)).flatMap(a => [String(a.value || ''), String(a.trait_type || '')]).filter(v => normTattoo(v) && !/^none$/i.test(v));
+          // Projekt-Tattoos stehen unter "Arm Trait" mit Werten wie "Tattoo Kult"; zur Sicherheit zählt jeder Wert, der mit "Tattoo" beginnt
+          const tattoos = attrs.filter(a => tt(a).includes(CFG.tattooTrait) || tt(a).includes('tattoo') || /^\s*tattoo/i.test(String(a.value || '')))
+            .map(a => String(a.value || '')).filter(v => normTattoo(v) && !/^none$/i.test(v));
           out[k] = { id, rarity, guess, tattoos, img: gw(meta && meta.image) };
         }
       }

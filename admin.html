@@ -188,7 +188,7 @@ Supply Solo WCRO Liquidity to secure the chart on the downside</textarea></div>
             const attrs = Array.isArray(meta.attributes) ? meta.attributes : [], tt = a => String(a.trait_type || '').toLowerCase();
             const rv = String((attrs.find(a => tt(a) === 'rarity') || {}).value || '').toLowerCase();
             const r = RARITIES.find(k => rv.includes(k)) || 'common';
-            const t = attrs.filter(a => tt(a).includes('tattoo')).flatMap(a => [String(a.value || ''), String(a.trait_type || '')]).filter(v => v && !/^(none|tattoo)$/i.test(v.trim()));
+            const t = attrs.filter(a => tt(a).includes('arm') || tt(a).includes('tattoo') || /^\s*tattoo/i.test(String(a.value || ''))).map(a => String(a.value || '')).filter(v => v && !/^(none|tattoo)$/i.test(v.trim()));   // Projekt-Tattoos: "Arm Trait" = "Tattoo Kult" usw.
             t.forEach(v => values.set(v, (values.get(v) || 0) + 1)); counts[r] = (counts[r] || 0) + 1; traits[id] = { r, t };
           } catch (e) { failed++; }
           done++; bar.firstElementChild.style.width = (done / 777 * 100) + '%'; msg('tr-msg', `Reading metadata… ${done} / 777`);

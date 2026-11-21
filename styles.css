@@ -747,3 +747,6 @@ p { margin: 0 0 1em; }
   .tiers-grid .floor strong { font-size: 11.5px; }
   .tiers-grid .one-of-one { top: -12px; right: -6px; width: 34px; height: 34px; font-size: 11px; }
 }
+
+/* Anzahl doppelter Projekt-Tattoos */
+.tat-n { color: var(--gold); font-weight: 800; }

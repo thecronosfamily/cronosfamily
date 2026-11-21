@@ -187,10 +187,10 @@
   })();
 
   /* ---------- Liquid-NFTs-Link (folgt) ---------- */
-  const LIQUID_NFT_URL = '';   // TODO: Obsidian-Link für Liquid NFTs hier eintragen
+  const LIQUID_NFT_URL = 'https://obsidian.finance/liquid-nfts/lionhearts-crofam';   // Liquid NFTs auf Obsidian (live seit 21.11.2026)
   (function () {
     const a = $('#liquid-link'); if (!a) return;
-    if (LIQUID_NFT_URL) { a.href = LIQUID_NFT_URL; a.removeAttribute('data-pending'); const s = $('.soon', a); if (s) s.remove(); a.insertAdjacentHTML('beforeend', ' <span aria-hidden="true">↗</span>'); return; }
+    if (LIQUID_NFT_URL) { a.href = LIQUID_NFT_URL; return; }
     a.addEventListener('click', e => { e.preventDefault(); showToast('The Liquid NFTs link on Obsidian follows soon.'); });
   })();
 
@@ -255,7 +255,15 @@
       el('tattoo-count').textContent = tattooList.length ? `${have.length} / ${tattooList.length}` : '';
       const list = el('tattoo-list');
       if (!tattooList.length) { const li = document.createElement('li'); li.className = 'note'; li.textContent = 'The list of project tattoos is published with the mint.'; list.replaceChildren(li); }
-      else list.replaceChildren(...tattooList.map(t => { const li = document.createElement('li'); li.textContent = String(t).replace(/^\s*tattoo\s+/i, '').replace(/\s+(kopie|copy)\s*\d*\s*$/i, ''); if (owned.has(normTattoo(t))) li.classList.add('has'); return li; }));
+      else {
+        // wie viele der Löwen jedes Projekt-Tattoo tragen; ab 2 steht "2x" davor, damit Holder sehen, was sie traden können
+        const cnt = new Map(); lions.forEach(l => new Set(l.tattoos.map(normTattoo)).forEach(k => cnt.set(k, (cnt.get(k) || 0) + 1)));
+        list.replaceChildren(...tattooList.map(t => {
+          const li = document.createElement('li'), n = cnt.get(normTattoo(t)) || 0, name = String(t).replace(/^\s*tattoo\s+/i, '').replace(/\s+(kopie|copy)\s*\d*\s*$/i, '');
+          if (n > 1) { const b = document.createElement('b'); b.className = 'tat-n'; b.textContent = n + 'x'; li.append(b, ' '); li.title = `${n} of your lions have this tattoo`; }
+          li.append(name); if (n) li.classList.add('has'); return li;
+        }));
+      }
       const items = lions.slice().sort((a, b) => WEIGHTS[b.rarity] - WEIGHTS[a.rarity] || a.id - b.id).map(l => {
         const li = document.createElement('li'); li.className = 'r-' + l.rarity;
         const img = document.createElement('img'); img.src = l.img || 'assets/crofam-logo-96.png'; img.alt = `Lionheart #${l.id}, ${RNAME[l.rarity]}`; img.loading = 'lazy'; img.width = 300; img.height = 300;
@@ -278,7 +286,7 @@
       return new TextDecoder().decode(bytes);
     }
     const gw = u => u ? u.replace(/^ipfs:\/\/(ipfs\/)?/, CFG.ipfsGateway) : u;
-    async function chunked(calls, size = 60, raw = false) {
+    async function chunked(calls, size = 10, raw = false) {
       const out = [];
       for (let i = 0; i < calls.length; i += size) { const r = await rpcBatch(calls.slice(i, i + size), raw); if (!r) throw new Error('rpc'); out.push(...r); }
       return out;
@@ -298,7 +306,7 @@
       return ids.filter((_, i) => r[i] === me);
     }
     async function metadata(ids) {
-      const uris = await chunked(ids.map(id => ['eth_call', [{ to: CFG.contract, data: sel.tokenURI + word(id) }, 'latest']]), 60, true);
+      const uris = await chunked(ids.map(id => ['eth_call', [{ to: CFG.contract, data: sel.tokenURI + word(id) }, 'latest']]), 10, true);
       const out = []; let i = 0;
       async function worker() {
         while (i < ids.length) {

@@ -787,4 +787,42 @@
       new IntersectionObserver(es => { visible = es[0].isIntersecting; visible ? start() : stop(); }, { rootMargin: '200px 0px' }).observe(sec);
     } else start();
   })();
+
+  /* ---------- Live-Floor je Rarity von Ebisus Bay (gleiche Quelle wie app.ebisusbay.com) ---------- */
+  (function () {
+    const els = $$('[data-floor]');
+    if (!els.length) return;
+    const LH = '0x25aaba3c218ebe3bbf8423c56c0084aa79aa249a';
+    const API = 'https://api.wolfswap.gg/factions/ebisus/listings';
+    const NAMES = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', epic: 'Epic', legendary: 'Legendary' };
+    const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: n < 100 ? 2 : 0 });
+    els.forEach(a => { const s = a.querySelector('strong'); s.textContent = 'Loading…'; s.classList.add('is-loading'); });
+    async function floorOf(rarity) {
+      const traits = encodeURIComponent(JSON.stringify({ Rarity: [NAMES[rarity]] }));
+      const r = await fetch(`${API}?chain=25&collection=${LH}&traits=${traits}&sortBy=price&direction=asc&onlyActive=true&croOnly=1&pageSize=1`);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const row = (await r.json()).rows?.[0];
+      return row ? Number(row.price) : null;      // null = in dieser Rarity ist gerade nichts gelistet
+    }
+    async function refresh() {
+      await Promise.all(els.map(async a => {
+        const s = a.querySelector('strong');
+        try {
+          const p = await floorOf(a.dataset.floor);
+          s.textContent = p === null ? 'None listed ↗' : `${fmt(p)} CRO ↗`;
+          a.title = p === null ? '' : `Cheapest ${NAMES[a.dataset.floor]} Lionheart listed on Ebisus Bay`;
+        } catch (e) {
+          if (s.classList.contains('is-loading')) s.textContent = 'View on Ebisus Bay ↗';   // letzten bekannten Preis behalten
+        }
+        s.classList.remove('is-loading');
+      }));
+    }
+    let timer = null;
+    const start = () => { refresh(); if (!timer) timer = setInterval(() => { if (!document.hidden) refresh(); }, 60000); };
+    const stop = () => { clearInterval(timer); timer = null; };
+    const sec = els[0].closest('section') || els[0];
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => { es[0].isIntersecting ? start() : stop(); }, { rootMargin: '300px 0px' }).observe(sec);
+    } else start();
+  })();
 })();

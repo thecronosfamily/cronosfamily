@@ -750,3 +750,13 @@ p { margin: 0 0 1em; }
 
 /* Anzahl doppelter Projekt-Tattoos */
 .tat-n { color: var(--gold); font-weight: 800; }
+
+/* Rarity-Kacheln: Bild verlinkt auf Ebisus Bay (gefiltert nach Rarity), Floor live */
+.tier-img { display: block; border-radius: 20px 20px 0 0; overflow: hidden; }
+.tier-img img { display: block; transition: transform .25s ease, filter .25s ease; }
+.tier-img:hover img, .tier-img:focus-visible img { transform: scale(1.04); filter: brightness(1.08); }
+.floor strong.is-loading { color: var(--muted); }
+@media (max-width: 720px) {
+  .tier-img { flex: none; border-radius: 16px 0 0 16px; }
+  .tiers-grid .tier-img { border-radius: 12px 12px 0 0; }
+}

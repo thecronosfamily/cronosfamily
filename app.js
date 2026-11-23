@@ -11,6 +11,8 @@
   const TREASURY = '0xeef6783014abeC80397B67e259Df1DBbE5f94A19';
   const OBS_PM = '0xe1a0f7944b00fee6f130a44c6d0482b19618b30c';        // Obsidian V3 Positions (NFT-Positionen)
   const OBS_FACTORY = '0x1638a449e99693fcb617380c5c3863df816c3b0b';   // Obsidian V3 Factory
+  const VVS_PM = '0xc2ddb059fec2afa593dff9c70fda2cfabe9b4ec8';        // VVS V3 Positions (Pool vom Token-Start, 1 % Fee)
+  const VVS_FACTORY = '0x40ab11c64e9ff5368f09343ac860dafa34e14c35';   // VVS V3 Factory
   const RPCS = ['https://evm.cronos.org', 'https://cronos-evm-rpc.publicnode.com'];
   const pad = a => a.toLowerCase().replace('0x', '').padStart(64, '0');
 
@@ -604,8 +606,9 @@
     // zuletzt bekannte Werte (16. Nov 2026), werden live überschrieben
     const state = {
       prices: { crofamCro: 0.001187, croUsd: 0.04239 },
-      bal: { staked: 237585962.45, crofam: 8924.771, wcro: 132.676, cro: 18.7789, lpCrofam: 258305.34, lpWcro: 304.698 },
+      bal: { staked: 237585962.45, crofam: 8924.771, wcro: 132.676, cro: 18.7789, lpCrofam: 258305.34, lpWcro: 304.698, vvsCrofam: 264000, vvsWcro: 76.58 },
       lp: { ids: [427], active: 1 },
+      vvs: { ids: [55498], active: 1 },
       live: false, updated: null
     };
     const nf = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -621,7 +624,12 @@
         sub: () => { const n = state.lp.ids.length, ids = state.lp.ids.map(i => '#' + i).join(', ');
           return n === 1 ? `Obsidian V3 position ${ids}${state.lp.active ? ', in range' : ', waiting outside the price'}` : `${n} Obsidian V3 positions (${ids}), ${state.lp.active} in range`; },
         amountText: () => `${nf(state.bal.lpCrofam)} CROFAM + ${nf(state.bal.lpWcro, 2)} WCRO`,
-        toCro: () => state.bal.lpCrofam * state.prices.crofamCro + state.bal.lpWcro }
+        toCro: () => state.bal.lpCrofam * state.prices.crofamCro + state.bal.lpWcro },
+      { key: 'vvs', name: 'CROFAM/WCRO VVS V3 Liquidity', color: '#c38bff', lp: true,
+        sub: () => { const n = state.vvs.ids.length, ids = state.vvs.ids.map(i => '#' + i).join(', ');
+          return n === 1 ? `VVS V3 position ${ids}, launch pool${state.vvs.active ? ', in range' : ', waiting outside the price'}` : `${n} VVS V3 positions (${ids}), ${state.vvs.active} in range`; },
+        amountText: () => `${nf(state.bal.vvsCrofam || 0)} CROFAM + ${nf(state.bal.vvsWcro || 0, 2)} WCRO`,
+        toCro: () => (state.bal.vvsCrofam || 0) * state.prices.crofamCro + (state.bal.vvsWcro || 0) }
     ];
     /* Lionhearts Staking Rewards: fest programmiert, keine Wallet-Abfrage.
        Bis 21.11.2026: 35M. Ab 22.11.2026 (00:00 UTC): 30M, danach jeden Tag gleich viel weniger,
@@ -646,7 +654,7 @@
       $('#tr-total-usd').textContent = '$' + nf(usd) + ' USD';
       $('#tr-kpi-staked').textContent = short(state.bal.staked);
       // Anteil am Gesamtsupply: alle $CROFAM der Treasury (gestakt + Wallet + in der V3-Liquidity) / 1.000.000.000
-      $('#tr-kpi-share').textContent = nf((state.bal.staked + state.bal.crofam + state.bal.lpCrofam) / TOTAL_SUPPLY * 100, 1) + '%';
+      $('#tr-kpi-share').textContent = nf((state.bal.staked + state.bal.crofam + state.bal.lpCrofam + (state.bal.vvsCrofam || 0)) / TOTAL_SUPPLY * 100, 1) + '%';
       const goal = GOALS.find(g => g > total) || GOALS[GOALS.length - 1], pct = Math.min(total / goal * 100, 100);
       $('#tr-goal-label').textContent = nf(goal) + ' CRO';
       $('#tr-goal-pct').textContent = nf(pct, 1) + '%';
@@ -698,18 +706,18 @@
       if (!r) return null;
       return { staked: units(r[0]), crofam: units(r[1]), wcro: units(r[2]), cro: units(r[3]) };
     }
-    /* Obsidian V3: alle CROFAM/WCRO-Positionen der Treasury, exakt aus Kurs, Preisspanne und offenen Gebühren */
-    async function loadLp() {
+    /* V3 (Obsidian bzw. VVS): alle CROFAM/WCRO-Positionen der Treasury, exakt aus Kurs, Preisspanne und offenen Gebühren */
+    async function loadLp(PM, FACTORY) {
       const M256 = 2n ** 256n, md = x => ((x % M256) + M256) % M256;
       const words = h => (h.slice(2).match(/.{64}/g) || []).map(w => BigInt('0x' + w));
       const s24 = v => Number(v >= 2n ** 255n ? v - M256 : v), enc = t => md(BigInt(t)).toString(16).padStart(64, '0');
       const w64 = n => BigInt(n).toString(16).padStart(64, '0');
-      const bal = await rpcBatch([['eth_call', [{ to: OBS_PM, data: '0x70a08231' + pad(TREASURY) }, 'latest']]]);
+      const bal = await rpcBatch([['eth_call', [{ to: PM, data: '0x70a08231' + pad(TREASURY) }, 'latest']]]);
       if (!bal) return null;
       const n = Number(bal[0] || 0n); if (!n) return { crofam: 0, wcro: 0, ids: [], active: 0 };
-      const ids = await rpcBatch([...Array(n)].map((_, i) => ['eth_call', [{ to: OBS_PM, data: '0x2f745c59' + pad(TREASURY) + w64(i) }, 'latest']]));
+      const ids = await rpcBatch([...Array(n)].map((_, i) => ['eth_call', [{ to: PM, data: '0x2f745c59' + pad(TREASURY) + w64(i) }, 'latest']]));
       if (!ids) return null;
-      const pos = await rpcBatch(ids.map(id => ['eth_call', [{ to: OBS_PM, data: '0x99fbab88' + w64(id) }, 'latest']]), true);
+      const pos = await rpcBatch(ids.map(id => ['eth_call', [{ to: PM, data: '0x99fbab88' + w64(id) }, 'latest']]), true);
       if (!pos) return null;
       let crofam = 0, wcro = 0, active = 0; const used = [];
       for (let k = 0; k < ids.length; k++) {
@@ -718,7 +726,7 @@
         const pair = [t0, t1].sort().join();
         if (pair !== [TOKEN, WCRO].sort().join()) continue;   // nur CROFAM/WCRO
         const fee = W[4], tl = s24(W[5]), tu = s24(W[6]), L = W[7];
-        const pw = await rpcBatch([['eth_call', [{ to: OBS_FACTORY, data: '0x1698ee82' + pad(t0) + pad(t1) + w64(fee) }, 'latest']]], true);
+        const pw = await rpcBatch([['eth_call', [{ to: FACTORY, data: '0x1698ee82' + pad(t0) + pad(t1) + w64(fee) }, 'latest']]], true);
         if (!pw || !pw[0]) return null;
         const pool = '0x' + pw[0].slice(-40);
         const r = await rpcBatch([['eth_call', [{ to: pool, data: '0x3850c7bd' }, 'latest']], ['eth_call', [{ to: pool, data: '0xf3058399' }, 'latest']],
@@ -746,11 +754,12 @@
     let busy = false;
     async function refresh() {
       if (busy) return; busy = true; const status = $('#tr-status'); status.textContent = 'Updating live values…';
-      const [p, b, lp] = await Promise.all([loadPrices(), loadBalances(), loadLp().catch(() => null)]);
+      const [p, b, lp, vvs] = await Promise.all([loadPrices(), loadBalances(), loadLp(OBS_PM, OBS_FACTORY).catch(() => null), loadLp(VVS_PM, VVS_FACTORY).catch(() => null)]);
       if (p) { state.prices = p; publish('prices', p); }
       if (b) Object.keys(b).forEach(k => { if (b[k] !== null) state.bal[k] = b[k]; });
       if (lp) { state.bal.lpCrofam = lp.crofam; state.bal.lpWcro = lp.wcro; state.lp.ids = lp.ids; state.lp.active = lp.active; }
-      state.live = Boolean(p && b && lp);
+      if (vvs) { state.bal.vvsCrofam = vvs.crofam; state.bal.vvsWcro = vvs.wcro; state.vvs.ids = vvs.ids; state.vvs.active = vvs.active; }
+      state.live = Boolean(p && b && lp && vvs);
       state.updated = Date.now(); render(); busy = false;
       const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       status.textContent = state.live ? `Live, updated at ${t}` : (p || b) ? `Partly live, updated at ${t}. Some sources could not be reached.` : 'Live data is not available right now. Showing the last known values.';

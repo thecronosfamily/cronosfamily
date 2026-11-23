@@ -89,38 +89,6 @@
     track.appendChild(frag);
   })();
 
-  /* ---------- Mint-Countdown ---------- */
-  (function () {
-    const card = $('#mint-card'); if (!card) return;
-    const MINT = Date.UTC(2026, 10, 21, 20, 0, 0), MAX = 777;
-    const cd = $('#mint-countdown'), parts = {}; $$('b[data-u]', cd).forEach(b => { parts[b.dataset.u] = b; });
-    let liveMode = false, mintedTimer = null;
-    async function loadMinted() {
-      if (!live.nftContract) return;
-      const r = await rpcBatch([['eth_call', [{ to: live.nftContract, data: '0x18160ddd' }, 'latest']]]);
-      if (!r || r[0] === null) return;
-      const n = Math.min(Number(r[0]), MAX);
-      $('#minted').hidden = false; $('#minted-count').textContent = n; $('#minted-bar').style.width = (n / MAX * 100) + '%';
-      if (n >= MAX) { $('#mint-title').textContent = 'Lionhearts sold out'; card.classList.remove('is-live'); clearInterval(mintedTimer); }
-    }
-    function goLive() {
-      if (liveMode) return; liveMode = true;
-      cd.hidden = true; card.classList.add('is-live');
-      $('#mint-sub').textContent = 'Mint on Ebisus Bay. Whitelist 212 CRO, public 250 CRO.';
-      $('#mint-cta').firstChild.textContent = 'Mint on Ebisus Bay ';
-      loadMinted(); mintedTimer = setInterval(() => { if (!document.hidden) loadMinted(); }, 30000);
-      bus.addEventListener('update', () => { if ($('#minted').hidden) loadMinted(); });
-    }
-    function tick() {
-      const ms = MINT - Date.now();
-      if (ms <= 0) { goLive(); return; }
-      const v = { d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 };
-      Object.keys(v).forEach(k => { const t = String(v[k]).padStart(2, '0'); if (parts[k].textContent !== t) parts[k].textContent = t; });
-      setTimeout(tick, 1000 - (Date.now() % 1000));
-    }
-    tick();
-  })();
-
   /* ---------- Live-Leiste unter dem Hero ---------- */
   (function () {
     const box = $('#live-stats'); if (!box) return;

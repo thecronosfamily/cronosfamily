@@ -23,7 +23,7 @@
   <link rel="preload" href="assets/fonts/poppins-700.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="stylesheet" href="styles.css?v=20261123a">
+  <link rel="stylesheet" href="styles.css?v=20261123b">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -65,25 +65,14 @@
             <a class="button button-gold" href="#lionhearts">Meet the Lionhearts</a>
             <a class="button button-vote" href="#vote" id="hero-vote" hidden><span class="live-dot" aria-hidden="true"></span>Vote</a>
           </div>
-          <div class="mint-card" id="mint-card">
+          <div class="mint-card is-soldout" id="mint-card">
             <div class="mint-info">
               <img src="assets/ebisusbay.png" alt="" width="40" height="40">
               <div>
-                <p class="mint-title" id="mint-title">Lionhearts mint</p>
-                <p class="mint-sub" id="mint-sub">Nov 21, 8 PM UTC on Ebisus Bay. Whitelist 212 CRO, public 250 CRO.</p>
+                <p class="mint-title">All 777 Lionhearts <span class="soldout">SOLD OUT</span></p>
               </div>
             </div>
-            <div class="countdown" id="mint-countdown" role="timer" aria-label="Time until the Lionhearts mint">
-              <span><b data-u="d">00</b><small>days</small></span>
-              <span><b data-u="h">00</b><small>hours</small></span>
-              <span><b data-u="m">00</b><small>min</small></span>
-              <span><b data-u="s">00</b><small>sec</small></span>
-            </div>
-            <div class="minted" id="minted" hidden>
-              <p><strong id="minted-count">0</strong> / 777 minted</p>
-              <div class="minted-bar"><span id="minted-bar"></span></div>
-            </div>
-            <a class="button button-solid" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer" id="mint-cta">Open the drop page <span aria-hidden="true">↗</span></a>
+            <a class="button button-solid" href="https://app.ebisusbay.com/collection/cronos/lionhearts-by-crofam" target="_blank" rel="noopener noreferrer">Lionhearts on Ebisus Bay <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </div>
@@ -197,21 +186,6 @@
             </div>
           </li>
         </ol>
-
-        <div class="mint-box">
-          <div class="mint-when">
-            <img src="assets/ebisusbay.png" alt="" width="56" height="56">
-            <div>
-              <p class="mint-k">Mint on Ebisus Bay</p>
-              <p class="mint-v">November 21, 2026, 8 PM UTC</p>
-            </div>
-          </div>
-          <dl class="mint-prices">
-            <div><dt>Whitelist</dt><dd>212 CRO</dd></div>
-            <div><dt>Public</dt><dd>250 CRO</dd></div>
-          </dl>
-          <a class="button button-gold" href="https://app.ebisusbay.com/drops/lionhearts" target="_blank" rel="noopener noreferrer">Open the drop page <span aria-hidden="true">↗</span></a>
-        </div>
 
         <div class="lh-utility">
           <article class="util-card">
@@ -352,8 +326,7 @@
             </div>
             <p>Your lion doesn't have to sit idle in your wallet. Stake your Lionhearts in the CROFAM crommunity on Obsidian and they earn $CROFAM for you. Unstake whenever you want.</p>
             <ul class="nft-pools">
-              <li><span class="pool-tag">Contract 1</span><strong>5M $CROFAM</strong><small>From mint, 24 hours only</small></li>
-              <li><span class="pool-tag">Contract 2</span><strong>30M $CROFAM</strong><small>Nov 22, 2026 to Feb 22, 2027</small></li>
+              <li><span class="pool-tag">Staking rewards</span><strong>30M $CROFAM</strong><small>Nov 22, 2026 to Feb 22, 2027</small></li>
             </ul>
             <ul class="stake-steps">
               <li>Open the <a href="https://obsidian.finance/crommunities/mze4cgr9rXulJDyJAkos/nfts" target="_blank" rel="noopener noreferrer">CROFAM crommunity on Obsidian</a></li>
@@ -532,6 +505,6 @@
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=20261123a" defer></script>
+  <script src="app.js?v=20261123b" defer></script>
 </body>
 </html>

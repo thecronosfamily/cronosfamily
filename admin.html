@@ -163,7 +163,14 @@ Supply Solo WCRO Liquidity to secure the chart on the downside</textarea></div>
     /* ---- Traits aus den Metadaten lesen ---- */
     async function rpc(calls) {
       const body = JSON.stringify(calls.map((c, i) => ({ jsonrpc: '2.0', id: i, method: 'eth_call', params: [{ to: c[0], data: c[1] }, 'latest'] })));
-      for (const u of RPCS) { try { const j = await (await fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body })).json(); const a = Array.isArray(j) ? j : [j]; return calls.map((_, i) => (a.find(x => x.id === i) || {}).result || null); } catch (e) { /* nächster */ } }
+      // evm.cronos.org erlaubt höchstens 10 Aufrufe pro Batch; liefert ein Endpunkt nur Fehler, wird der nächste versucht
+      for (let round = 0; round < 3; round++) for (const u of RPCS) {
+        try {
+          const j = await (await fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body })).json(); const a = Array.isArray(j) ? j : [j];
+          const out = calls.map((_, i) => { const r = a.find(x => x.id === i); return r && r.result && r.result !== '0x' ? r.result : null; });
+          if (out.every(v => v !== null)) return out;
+        } catch (e) { /* nächster */ }
+      }
       throw new Error('rpc');
     }
     function decodeString(hex) { const h = hex.slice(2), off = parseInt(h.slice(0, 64), 16) * 2, len = parseInt(h.slice(off, off + 64), 16); return new TextDecoder().decode(new Uint8Array((h.slice(off + 64, off + 64 + len * 2).match(/../g) || []).map(x => parseInt(x, 16)))); }
@@ -175,7 +182,7 @@ Supply Solo WCRO Liquidity to secure the chart on the downside</textarea></div>
       const ids = [...Array(777)].map((_, i) => i + 1), uris = [];
       try {
         msg('tr-msg', 'Reading token addresses…');
-        for (let i = 0; i < ids.length; i += 50) uris.push(...await rpc(ids.slice(i, i + 50).map(id => [c, '0xc87b56dd' + BigInt(id).toString(16).padStart(64, '0')])));
+        for (let i = 0; i < ids.length; i += 10) { uris.push(...await rpc(ids.slice(i, i + 10).map(id => [c, '0xc87b56dd' + BigInt(id).toString(16).padStart(64, '0')]))); msg('tr-msg', `Reading token addresses… ${Math.min(i + 10, 777)} / 777`); }
       } catch (e) { return msg('tr-msg', 'The Cronos network could not be reached.', 'err'); }
       traits = {}; let done = 0, failed = 0; const values = new Map(), counts = {};
       async function worker() {
@@ -201,7 +208,7 @@ Supply Solo WCRO Liquidity to secure the chart on the downside</textarea></div>
       $('up-traits').hidden = false;
     });
     $('up-traits').addEventListener('click', async () => {
-      try { const j = await call('PUT', '/admin/traits', { traits }); msg('tr-msg', `${j.count} lions stored on the vote server.`, 'ok'); $('up-traits').hidden = true; }
+      try { const j = await call('PUT', '/admin/traits', { traits }); msg('tr-msg', `${j.count} lions stored on the vote server.` + (j.recalculated ? ` ${j.recalculated} vote${j.recalculated === 1 ? '' : 's'} in running polls recalculated.` : ''), 'ok'); $('up-traits').hidden = true; }
       catch (e) { msg('tr-msg', e.message, 'err'); }
     });
   })();

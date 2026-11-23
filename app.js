@@ -249,7 +249,7 @@
       lastCount = { base, total, lions: lions.length, mult };
       el('votes-total').textContent = num(total);
       el('votes-calc').textContent = opts.empty ? opts.empty : lions.length === 0 ? 'No Lionhearts in this wallet yet.' :
-        `${lions.length} lion${lions.length === 1 ? '' : 's'}, ${num(base)} base votes` + (full ? ` × ${num(mult)} tattoo bonus` : '');
+        `${lions.length} lion${lions.length === 1 ? '' : 's'}` + (lions.some(l => l.staked) ? ` (${lions.filter(l => l.staked).length} staked)` : '') + `, ${num(base)} base votes` + (full ? ` × ${num(mult)} tattoo bonus` : '');
       el('bonus-chip').classList.toggle('is-on', full);
       el('bonus-chip').textContent = full ? `x${num(mult)} bonus active` : 'up to x2';
       el('tattoo-count').textContent = tattooList.length ? `${have.length} / ${tattooList.length}` : '';
@@ -265,7 +265,8 @@
         }));
       }
       const items = lions.slice().sort((a, b) => WEIGHTS[b.rarity] - WEIGHTS[a.rarity] || a.id - b.id).map(l => {
-        const li = document.createElement('li'); li.className = 'r-' + l.rarity;
+        const li = document.createElement('li'); li.className = 'r-' + l.rarity + (l.staked ? ' is-staked' : '');
+        if (l.staked) { const s = document.createElement('em'); s.className = 'staked-tag'; s.textContent = 'Staked'; s.title = 'Staked on Obsidian. Still counts for your votes.'; li.append(s); }
         const img = document.createElement('img'); img.src = l.img || 'assets/crofam-logo-96.png'; img.alt = `Lionheart #${l.id}, ${RNAME[l.rarity]}`; img.loading = 'lazy'; img.width = 300; img.height = 300;
         const m = document.createElement('div'); m.className = 'meta';
         const b = document.createElement('strong'); b.textContent = '#' + l.id;
@@ -333,6 +334,13 @@
       return out;
     }
 
+    /* Gestakte Löwen (Obsidian) liegen im Staking-Contract; wer sie gestakt hat, weiß der Vote-Server */
+    async function stakedIds(addr) {
+      if (!VOTE_API) return [];
+      try { const r = await api(`/staked?wallet=${addr}`); return r && r.ok && Array.isArray(r.ids) ? r.ids.map(Number) : []; }
+      catch (e) { return []; }
+    }
+
     async function show(addr, label) {
       const me = ++run;
       addrBox.hidden = false; addrBox.innerHTML = ''; const sm = document.createElement('small'); sm.textContent = label; addrBox.append(sm, addr);
@@ -343,10 +351,12 @@
       }
       say('Looking for Lionhearts in this wallet…'); grid.replaceChildren();
       try {
-        const ids = await tokenIds(addr); if (me !== run) return;
+        const [held, staked] = await Promise.all([tokenIds(addr), stakedIds(addr)]); if (me !== run) return;
+        const ids = [...new Set([...held, ...staked])].sort((a, b) => a - b);
         if (!ids.length) { render([], CFG.projectTattoos); say('No Lionhearts found in this wallet.'); return; }
-        say(`Found ${ids.length} Lionheart${ids.length === 1 ? '' : 's'}. Loading the details…`);
+        say(`Found ${ids.length} Lionheart${ids.length === 1 ? '' : 's'}${staked.length ? ` (${staked.length} staked)` : ''}. Loading the details…`);
         const lions = await metadata(ids); if (me !== run) return;
+        lions.forEach(l => { l.staked = staked.includes(l.id) && !held.includes(l.id); });
         render(lions, CFG.projectTattoos); if (addr === account) { power = lastCount; renderVote(); } say(lions.some(l => l.guess) ? 'Lions marked with * have no rarity in their metadata and count as Common.' : '');
       } catch (e) { if (me === run) say('The Cronos network could not be reached. Please try again in a moment.', true); }
     }

@@ -760,3 +760,8 @@ p { margin: 0 0 1em; }
   .tier-img { flex: none; border-radius: 16px 0 0 16px; }
   .tiers-grid .tier-img { border-radius: 12px 12px 0 0; }
 }
+
+/* Gestakte Löwen unter "Your Lionhearts" */
+.vault-grid li { position: relative; }
+.vault-grid .staked-tag { position: absolute; top: 8px; left: 8px; z-index: 1; padding: 3px 9px; border-radius: 999px; font: 700 11px var(--font); font-style: normal; letter-spacing: .06em; text-transform: uppercase;
+  color: #bffbff; background: rgba(4, 20, 44, .85); border: 1px solid #5ff3ff; box-shadow: 0 0 12px rgba(95, 243, 255, .45); }
